@@ -2,44 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Planit - To-Do App</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
   <div class="theme-toggle">
-    <label class="switch">
-      <input type="checkbox" id="themeSwitch">
-      <span class="slider round"></span>
-    </label>
-    <span id="themeLabel">Light Mode</span>
+    <label for="toggle-theme">Dark Mode</label>
+    <input type="checkbox" id="toggle-theme" />
   </div>
 
   <div class="container">
-    <h1 class="glow-title">📋 Planit</h1>
+    <h1 class="glow-title">Planit</h1>
 
     <div class="project-bar">
-      <input type="text" id="projectInput" placeholder="New Project" />
-      <button onclick="addProject()">➕</button>
+      <input type="text" id="projectInput" placeholder="New Project Name" />
+      <button id="addProjectBtn">Add Project</button>
       <select id="projectSelect"></select>
     </div>
 
     <div class="task-bar">
-      <input id="taskInput" type="text" placeholder="Add a new task" />
-      <input type="date" id="dueDate" />
-      <input id="tagInput" type="text" placeholder="Tag (Work, Urgent...)" />
-      <select id="prioritySelect">
-        <option>Low</option>
-        <option>Medium</option>
-        <option>High</option>
+      <input type="text" id="taskInput" placeholder="New Task Name" />
+      <select id="tagSelect">
+        <option value="Work">Work</option>
+        <option value="Urgent">Urgent</option>
+        <option value="Personal">Personal</option>
+        <option value="Low">Low</option>
       </select>
-      <button onclick="addTask()">Add</button>
+      <input type="date" id="dueDateInput" />
+      <button id="addTaskBtn">+</button>
     </div>
+
+    <!-- Search input -->
+    <input type="text" id="searchInput" placeholder="Search tasks..." style="margin-bottom:15px; padding:8px; width: 100%; border-radius: 6px; border: 1px solid #ccc;" />
 
     <ul id="taskList"></ul>
   </div>
 
-  <canvas id="bgCanvas"></canvas>
+  <!-- SortableJS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
   <script src="script.js"></script>
 </body>
 </html>
