@@ -1,189 +1,305 @@
-// Keep your data model
+// Initial data keys for localStorage
+const TASKS_KEY = 'planit_tasks';
+const PROJECTS_KEY = 'planit_projects';
+const THEME_KEY = 'planit_theme';
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('service-worker.js')
-      .then(() => console.log('Service Worker Registered'))
-      .catch(err => console.log('Service Worker registration failed:', err));
-  });
-}
+// Selectors
 const projectInput = document.getElementById('projectInput');
 const addProjectBtn = document.getElementById('addProjectBtn');
 const projectSelect = document.getElementById('projectSelect');
+
 const taskInput = document.getElementById('taskInput');
 const tagSelect = document.getElementById('tagSelect');
 const dueDateInput = document.getElementById('dueDateInput');
 const addTaskBtn = document.getElementById('addTaskBtn');
-const taskList = document.getElementById('taskList');
+
 const searchInput = document.getElementById('searchInput');
+const taskList = document.getElementById('taskList');
+
 const toggleTheme = document.getElementById('toggle-theme');
 
-let data = { projects: {} };
+let tasks = [];
+let projects = [];
 let currentProject = null;
+let filteredTasks = [];
 
-function loadData() {
-  const saved = localStorage.getItem('planitData');
+// Load saved projects from localStorage or start with default
+function loadProjects() {
+  const saved = localStorage.getItem(PROJECTS_KEY);
   if (saved) {
-    data = JSON.parse(saved);
-    if (Object.keys(data.projects).length > 0) {
-      currentProject = Object.keys(data.projects)[0];
-    }
+    projects = JSON.parse(saved);
+  } else {
+    projects = ['Default Project'];
+    saveProjects();
   }
 }
 
-function saveData() {
-  localStorage.setItem('planitData', JSON.stringify(data));
+// Save projects to localStorage
+function saveProjects() {
+  localStorage.setItem(PROJECTS_KEY, JSON.stringify(projects));
 }
 
-function renderProjects() {
+// Load saved tasks from localStorage or empty array
+function loadTasks() {
+  const saved = localStorage.getItem(TASKS_KEY);
+  if (saved) {
+    tasks = JSON.parse(saved);
+  } else {
+    tasks = [];
+  }
+}
+
+// Save tasks to localStorage
+function saveTasks() {
+  localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+}
+
+// Populate projectSelect dropdown
+function populateProjects() {
   projectSelect.innerHTML = '';
-  for (const proj of Object.keys(data.projects)) {
-    const opt = document.createElement('option');
-    opt.value = proj;
-    opt.textContent = proj;
-    projectSelect.appendChild(opt);
+  projects.forEach((proj) => {
+    const option = document.createElement('option');
+    option.value = proj;
+    option.textContent = proj;
+    projectSelect.appendChild(option);
+  });
+  if (!currentProject || !projects.includes(currentProject)) {
+    currentProject = projects[0];
   }
-  if (currentProject) {
-    projectSelect.value = currentProject;
-  }
+  projectSelect.value = currentProject;
 }
 
+// Add new project
+function addProject() {
+  const projectName = projectInput.value.trim();
+  if (!projectName) {
+    alert('Please enter a project name.');
+    return;
+  }
+  if (projects.includes(projectName)) {
+    alert('Project already exists.');
+    return;
+  }
+  projects.push(projectName);
+  saveProjects();
+  populateProjects();
+  currentProject = projectName;
+  projectInput.value = '';
+  renderTasks();
+}
+
+// Add new task
+function addTask() {
+  const taskName = taskInput.value.trim();
+  const tag = tagSelect.value;
+  const dueDate = dueDateInput.value ? new Date(dueDateInput.value) : null;
+
+  if (!taskName) {
+    alert('Please enter a task name.');
+    return;
+  }
+  if (!currentProject) {
+    alert('Please select a project first.');
+    return;
+  }
+
+  tasks.push({
+    id: Date.now().toString(),
+    name: taskName,
+    tag: tag,
+    dueDate: dueDate ? dueDate.toISOString() : null,
+    completed: false,
+    project: currentProject
+  });
+
+  saveTasks();
+  taskInput.value = '';
+  dueDateInput.value = '';
+  renderTasks();
+}
+
+// Render tasks filtered by currentProject and search input
 function renderTasks() {
-  taskList.innerHTML = '';
-  if (!currentProject || !data.projects[currentProject]) return;
-
   const searchTerm = searchInput.value.trim().toLowerCase();
+  filteredTasks = tasks.filter(
+    (task) =>
+      task.project === currentProject &&
+      task.name.toLowerCase().includes(searchTerm)
+  );
 
-  for (const [index, task] of data.projects[currentProject].entries()) {
-    if (searchTerm && !task.name.toLowerCase().includes(searchTerm)) continue;
+  taskList.innerHTML = '';
 
+  if (filteredTasks.length === 0) {
+    taskList.innerHTML = `<li style="text-align:center; color:#888; font-style:italic;">
+      No tasks found.
+    </li>`;
+    return;
+  }
+
+  filteredTasks.forEach((task) => {
     const li = document.createElement('li');
-    li.dataset.index = index;
+    li.setAttribute('data-id', task.id);
 
+    // Checkbox for completed
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    checkbox.checked = task.done;
+    checkbox.checked = task.completed;
     checkbox.addEventListener('change', () => {
-      task.done = checkbox.checked;
-      saveData();
+      task.completed = checkbox.checked;
+      saveTasks();
       renderTasks();
     });
 
-    const taskName = document.createElement('span');
-    taskName.textContent = task.name;
-    if (task.done) {
-      taskName.style.textDecoration = 'line-through';
-      taskName.style.opacity = '0.6';
+    // Task name with strikethrough if completed
+    const taskNameSpan = document.createElement('span');
+    taskNameSpan.textContent = task.name;
+    if (task.completed) {
+      taskNameSpan.style.textDecoration = 'line-through';
+      taskNameSpan.style.color = '#999';
     }
 
-    const tag = document.createElement('span');
-    tag.textContent = task.tag;
-    tag.classList.add('tag', task.tag);
+    // Tag badge
+    const tagSpan = document.createElement('span');
+    tagSpan.textContent = task.tag;
+    tagSpan.className = `tag ${task.tag}`;
 
-    const dueDate = document.createElement('small');
+    // Due date formatted
+    const dueDateSpan = document.createElement('span');
     if (task.dueDate) {
-      dueDate.textContent = ' - ' + new Date(task.dueDate).toLocaleDateString();
-      dueDate.style.marginLeft = '10px';
-      dueDate.style.fontSize = '0.8rem';
-      dueDate.style.color = 'gray';
+      const date = new Date(task.dueDate);
+      dueDateSpan.textContent = `Due: ${date.toLocaleDateString()}`;
+      dueDateSpan.style.marginLeft = '12px';
+      dueDateSpan.style.fontSize = '0.85rem';
+      dueDateSpan.style.color = '#555';
+      if (task.completed) {
+        dueDateSpan.style.color = '#999';
+      }
     }
 
+    // Remove button
     const removeBtn = document.createElement('button');
-    removeBtn.textContent = '×';
     removeBtn.className = 'remove-btn';
+    removeBtn.textContent = '✕';
+    removeBtn.title = 'Remove Task';
     removeBtn.addEventListener('click', () => {
-      data.projects[currentProject].splice(index, 1);
-      saveData();
-      renderTasks();
+      if (confirm('Remove this task?')) {
+        tasks = tasks.filter((t) => t.id !== task.id);
+        saveTasks();
+        renderTasks();
+      }
     });
 
     li.appendChild(checkbox);
-    li.appendChild(taskName);
-    li.appendChild(tag);
-    li.appendChild(dueDate);
+    li.appendChild(taskNameSpan);
+    li.appendChild(tagSpan);
+    if (task.dueDate) li.appendChild(dueDateSpan);
     li.appendChild(removeBtn);
 
     taskList.appendChild(li);
-  }
+  });
+
+  // Re-enable drag-and-drop after rendering
+  enableDragDrop();
 }
 
-function addProject() {
-  const name = projectInput.value.trim();
-  if (!name) return alert('Project name cannot be empty');
-  if (data.projects[name]) return alert('Project already exists');
+// Enable drag and drop sorting with SortableJS
+function enableDragDrop() {
+  Sortable.create(taskList, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    onEnd: function (evt) {
+      const itemEl = evt.item; 
+      const movedId = itemEl.getAttribute('data-id');
 
-  data.projects[name] = [];
-  currentProject = name;
-  projectInput.value = '';
-  saveData();
-  renderProjects();
-  renderTasks();
+      // Remove moved task from tasks array
+      const movedTaskIndex = tasks.findIndex((t) => t.id === movedId);
+      if (movedTaskIndex === -1) return;
+
+      // Remove the moved task
+      const [movedTask] = tasks.splice(movedTaskIndex, 1);
+
+      // Find index of task after which it was dropped
+      const newIndex = Array.from(taskList.children).indexOf(itemEl);
+
+      // Find tasks of current project in order
+      const currentTasks = tasks.filter((t) => t.project === currentProject);
+
+      // Insert movedTask into correct position in all tasks
+      // Find global index to insert at
+      let globalInsertIndex = tasks.findIndex((t) => {
+        // The first task that comes after newIndex in currentTasks list
+        return t.project === currentProject && currentTasks.indexOf(t) === newIndex;
+      });
+      if (globalInsertIndex === -1) {
+        // If dropped at end, push to the end
+        tasks.push(movedTask);
+      } else {
+        tasks.splice(globalInsertIndex, 0, movedTask);
+      }
+
+      saveTasks();
+      renderTasks();
+    }
+  });
 }
 
-function addTask() {
-  const name = taskInput.value.trim();
-  if (!name) return alert('Task name cannot be empty');
-  if (!currentProject) return alert('No project selected');
-
-  const task = {
-    name,
-    tag: tagSelect.value,
-    done: false,
-    dueDate: dueDateInput.value || null,
-  };
-
-  data.projects[currentProject].push(task);
-  taskInput.value = '';
-  dueDateInput.value = '';
-  saveData();
-  renderTasks();
-}
-
-// Event Listeners
-addProjectBtn.addEventListener('click', addProject);
-addTaskBtn.addEventListener('click', addTask);
+// Change project event handler
 projectSelect.addEventListener('change', () => {
   currentProject = projectSelect.value;
   renderTasks();
 });
+
+// Search input handler
 searchInput.addEventListener('input', renderTasks);
 
-// SortableJS for drag & drop reorder
-const sortable = new Sortable(taskList, {
-  animation: 150,
-  onEnd: (evt) => {
-    if (!currentProject) return;
-    const list = data.projects[currentProject];
-    const [movedItem] = list.splice(evt.oldIndex, 1);
-    list.splice(evt.newIndex, 0, movedItem);
-    saveData();
-    renderTasks();
-  },
+// Add project button click
+addProjectBtn.addEventListener('click', addProject);
+
+// Add task button click
+addTaskBtn.addEventListener('click', addTask);
+
+// Enter key support for inputs
+projectInput.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') addProject();
 });
 
-// Theme toggle & persistence
+taskInput.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') addTask();
+});
+
+dueDateInput.addEventListener('keyup', (e) => {
+  if (e.key === 'Enter') addTask();
+});
+
+// Theme toggle
 function loadTheme() {
-  const savedTheme = localStorage.getItem('planitTheme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-theme');
+  const theme = localStorage.getItem(THEME_KEY) || 'light';
+  if (theme === 'dark') {
+    document.body.classList.add('dark');
     toggleTheme.checked = true;
   } else {
-    document.body.classList.remove('dark-theme');
+    document.body.classList.remove('dark');
     toggleTheme.checked = false;
   }
 }
 
+function saveTheme(theme) {
+  localStorage.setItem(THEME_KEY, theme);
+}
+
 toggleTheme.addEventListener('change', () => {
   if (toggleTheme.checked) {
-    document.body.classList.add('dark-theme');
-    localStorage.setItem('planitTheme', 'dark');
+    document.body.classList.add('dark');
+    saveTheme('dark');
   } else {
-    document.body.classList.remove('dark-theme');
-    localStorage.setItem('planitTheme', 'light');
+    document.body.classList.remove('dark');
+    saveTheme('light');
   }
 });
 
-loadData();
-renderProjects();
-renderTasks();
+// Initial load
+loadProjects();
+populateProjects();
+loadTasks();
 loadTheme();
+renderTasks();
