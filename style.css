@@ -1,97 +1,159 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f2f2f2;
-  color: #333;
+* {
+  box-sizing: border-box;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.5s, color 0.5s;
+  overflow-x: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --primary-color: #4CAF50;
+  --secondary-color: #eee;
+  --accent-color: #2196F3;
+}
+
+.dark-theme {
+  --bg-color: #121212;
+  --text-color: #eee;
+  --secondary-color: #1e1e1e;
+  --accent-color: #90CAF9;
 }
 
 .container {
-  max-width: 700px;
+  max-width: 800px;
   margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ccc;
+  padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 h1 {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
-.task-input, .project-controls {
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.switch input { display: none; }
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px; width: 14px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.project-bar, .task-bar {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
   flex-wrap: wrap;
 }
 
 input, select, button {
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 button {
-  background: #00aaff;
+  background-color: var(--accent-color);
   color: white;
   border: none;
   cursor: pointer;
 }
-
 button:hover {
-  background: #0077cc;
+  opacity: 0.9;
 }
 
-ul {
+.progress-container {
+  height: 20px;
+  background: var(--secondary-color);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+#progressFill {
+  height: 100%;
+  background: var(--primary-color);
+  text-align: center;
+  color: white;
+  line-height: 20px;
+  transition: width 0.4s ease;
+}
+
+ul#taskList {
   list-style: none;
   padding: 0;
 }
 
-li {
-  padding: 10px;
-  background: #f9f9f9;
+.task {
+  background: var(--secondary-color);
+  padding: 1rem;
+  border-radius: 8px;
   margin-bottom: 10px;
-  border-radius: 10px;
-  position: relative;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.3s ease;
 }
 
-.completed {
-  text-decoration: line-through;
-  opacity: 0.7;
+.task.dragging {
+  opacity: 0.5;
 }
 
 .tag {
-  display: inline-block;
   padding: 3px 8px;
-  font-size: 12px;
-  margin-top: 5px;
-  border-radius: 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  margin-left: 8px;
   color: white;
-  background: #666;
 }
+.tag.Work { background-color: #2196F3; }
+.tag.Urgent { background-color: #f44336; }
+.tag.Personal { background-color: #9C27B0; }
 
-.tag-Work { background: #3498db; }
-.tag-Urgent { background: #e74c3c; }
-.tag-Personal { background: #9b59b6; }
-
-.progress-bar {
-  background: #eee;
-  border-radius: 20px;
-  overflow: hidden;
-  height: 20px;
-  margin-bottom: 20px;
-}
-
-#progressFill {
-  background: #4caf50;
-  height: 100%;
-  width: 0%;
-  text-align: center;
-  color: white;
-  font-size: 12px;
-}
+canvas#bgCanvas {
+  positi
