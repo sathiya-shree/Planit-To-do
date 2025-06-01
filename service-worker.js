@@ -1,0 +1,28 @@
+const CACHE_NAME = 'planit-cache-v1';
+const urlsToCache = [
+  '.',
+  'index.html',
+  'style.css',
+  'script.js',
+  'manifest.json',
+  // Add icons too if used
+  'icon-192.png',
+  'icon-512.png',
+  'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
