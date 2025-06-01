@@ -9,13 +9,14 @@ PlanIt is a smart, modern to-do list app built with HTML, CSS, and JavaScript. I
 
 ✨ Features
 
-- ✅ Add tasks with title, tag, date, and priority
-- 🔍 Live search bar
-- 🌗 Dark mode toggle
-- 📌 Pin important tasks to top
-- 🧹 Clear completed tasks
-- 💾 Save tasks to LocalStorage
-- 🔄 Responsive UI
+- ✅ Add tasks with date, tag, priority
+- 🧠 Project folders for organization
+- 📊 Dynamic progress bar
+- 🎨 Color-coded tags
+- 📌 Pin/Unpin tasks
+- 🔍 Live search (coming soon!)
+- 🌙 Dark mode (coming soon!)
+- 💾 Persistent data with LocalStorage
 
 ---
 
