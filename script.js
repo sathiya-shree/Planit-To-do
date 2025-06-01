@@ -1,183 +1,181 @@
-// THEME
-const themeSwitch = document.getElementById("themeSwitch");
-const themeLabel = document.getElementById("themeLabel");
+// Data structure: { projects: { projectName: [ {taskObj}, ... ] } }
 
-themeSwitch.addEventListener("change", () => {
-  document.body.classList.toggle("dark-theme");
-  themeLabel.textContent = themeSwitch.checked ? "Dark Mode" : "Light Mode";
-});
+const projectInput = document.getElementById('projectInput');
+const addProjectBtn = document.getElementById('addProjectBtn');
+const projectSelect = document.getElementById('projectSelect');
+const taskInput = document.getElementById('taskInput');
+const tagSelect = document.getElementById('tagSelect');
+const dueDateInput = document.getElementById('dueDateInput');
+const addTaskBtn = document.getElementById('addTaskBtn');
+const taskList = document.getElementById('taskList');
+const searchInput = document.getElementById('searchInput');
+const toggleTheme = document.getElementById('toggle-theme');
 
-// TASKS
-let tasks = [];
-let projects = [];
-let currentProject = "";
+let data = {
+  projects: {}
+};
 
-const taskList = document.getElementById("taskList");
-const projectSelect = document.getElementById("projectSelect");
+let currentProject = null;
 
-function addProject() {
-  const input = document.getElementById("projectInput");
-  const name = input.value.trim();
-  if (!name || projects.includes(name)) return;
-  projects.push(name);
-  currentProject = name;
-  renderProjects();
-  input.value = "";
+// Load data from localStorage
+function loadData() {
+  const saved = localStorage.getItem('planitData');
+  if (saved) {
+    data = JSON.parse(saved);
+    if (Object.keys(data.projects).length) {
+      currentProject = Object.keys(data.projects)[0];
+    }
+  }
 }
 
+// Save data to localStorage
+function saveData() {
+  localStorage.setItem('planitData', JSON.stringify(data));
+}
+
+// Populate project dropdown
 function renderProjects() {
-  projectSelect.innerHTML = "";
-  projects.forEach(p => {
-    const opt = document.createElement("option");
-    opt.value = opt.text = p;
+  projectSelect.innerHTML = '';
+  for (let proj of Object.keys(data.projects)) {
+    const opt = document.createElement('option');
+    opt.value = proj;
+    opt.textContent = proj;
     projectSelect.appendChild(opt);
-  });
+  }
   projectSelect.value = currentProject;
 }
 
-projectSelect.addEventListener("change", () => {
+// Render tasks for current project, filtered by search term
+function renderTasks() {
+  if (!currentProject || !data.projects[currentProject]) {
+    taskList.innerHTML = '<li>No project selected.</li>';
+    return;
+  }
+  const searchTerm = searchInput.value.toLowerCase();
+
+  taskList.innerHTML = '';
+  const tasks = data.projects[currentProject];
+
+  tasks.forEach((task, index) => {
+    // Filter by search term (task name or tag)
+    if (
+      task.name.toLowerCase().includes(searchTerm) ||
+      task.tag.toLowerCase().includes(searchTerm)
+    ) {
+      const li = document.createElement('li');
+      li.classList.add('task');
+      li.setAttribute('data-id', index);
+
+      li.innerHTML = `
+        <input type="checkbox" ${task.done ? 'checked' : ''}>
+        <span>
+          ${task.name}
+          <span class="tag ${task.tag}">${task.tag}</span>
+          <span>${task.dueDate ? '(' + task.dueDate + ')' : ''}</span>
+        </span>
+        <button class="remove-btn" title="Remove task">&times;</button>
+      `;
+
+      taskList.appendChild(li);
+    }
+  });
+}
+
+// Add new project
+addProjectBtn.onclick = () => {
+  const name = projectInput.value.trim();
+  if (!name) return alert('Enter project name');
+  if (data.projects[name]) return alert('Project already exists');
+  data.projects[name] = [];
+  currentProject = name;
+  projectInput.value = '';
+  saveData();
+  renderProjects();
+  renderTasks();
+};
+
+// Switch project
+projectSelect.onchange = () => {
   currentProject = projectSelect.value;
   renderTasks();
+};
+
+// Add new task
+addTaskBtn.onclick = () => {
+  const name = taskInput.value.trim();
+  const tag = tagSelect.value;
+  const dueDate = dueDateInput.value;
+  if (!name) return alert('Enter task name');
+  if (!currentProject) return alert('Select a project');
+
+  data.projects[currentProject].push({ name, tag, dueDate, done: false });
+  taskInput.value = '';
+  dueDateInput.value = '';
+  saveData();
+  renderTasks();
+};
+
+// Toggle task done and remove task
+taskList.onclick = (e) => {
+  if (e.target.tagName === 'INPUT' && e.target.type === 'checkbox') {
+    const id = e.target.parentElement.getAttribute('data-id');
+    data.projects[currentProject][id].done = e.target.checked;
+    saveData();
+  }
+
+  if (e.target.classList.contains('remove-btn')) {
+    const id = e.target.parentElement.getAttribute('data-id');
+    data.projects[currentProject].splice(id, 1);
+    saveData();
+    renderTasks();
+  }
+};
+
+// Search filter
+searchInput.oninput = () => {
+  renderTasks();
+};
+
+// Drag-and-drop using SortableJS
+new Sortable(taskList, {
+  animation: 150,
+  onEnd: (evt) => {
+    if (!currentProject) return;
+    const movedItem = data.projects[currentProject].splice(evt.oldIndex, 1)[0];
+    data.projects[currentProject].splice(evt.newIndex, 0, movedItem);
+    saveData();
+    renderTasks();
+  }
 });
 
-function addTask() {
-  const taskInput = document.getElementById("taskInput");
-  const tagInput = document.getElementById("tagInput");
-  const dueDate = document.getElementById("dueDate").value;
-  const priority = document.getElementById("prioritySelect").value;
-
-  if (!taskInput.value.trim() || !currentProject) return;
-
-  tasks.push({
-    id: Date.now(),
-    project: currentProject,
-    text: taskInput.value.trim(),
-    tag: tagInput.value.trim(),
-    due: dueDate,
-    priority,
-    done: false
-  });
-
-  taskInput.value = tagInput.value = "";
-  renderTasks();
-}
-
-function renderTasks() {
-  const relevant = tasks.filter(t => t.project === currentProject);
-  taskList.innerHTML = "";
-  relevant.forEach(t => {
-    const li = document.createElement("li");
-    li.className = "task";
-    li.draggable = true;
-    li.dataset.id = t.id;
-
-    li.innerHTML = `
-      <span>
-        <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTask(${t.id})"/>
-        ${t.text} 
-        ${t.tag ? `<span class="tag ${t.tag}">${t.tag}</span>` : ""}
-        ${t.due ? `📅 ${t.due}` : ""}
-      </span>
-      <button onclick="removeTask(${t.id})">❌</button>
-    `;
-
-    addDragEvents(li);
-    taskList.appendChild(li);
-  });
-}
-
-function toggleTask(id) {
-  const task = tasks.find(t => t.id === id);
-  if (task) task.done = !task.done;
-  renderTasks();
-}
-
-function removeTask(id) {
-  tasks = tasks.filter(t => t.id !== id);
-  renderTasks();
-}
-
-// DRAG AND DROP
-let dragged;
-function addDragEvents(item) {
-  item.addEventListener("dragstart", () => {
-    dragged = item;
-    item.classList.add("dragging");
-  });
-  item.addEventListener("dragend", () => {
-    dragged = null;
-    item.classList.remove("dragging");
-  });
-  item.addEventListener("dragover", (e) => {
-    e.preventDefault();
-    const after = getDragAfterElement(taskList, e.clientY);
-    if (after == null) {
-      taskList.appendChild(dragged);
-    } else {
-      taskList.insertBefore(dragged, after);
-    }
-    reorderTasks();
-  });
-}
-
-function getDragAfterElement(container, y) {
-  const items = [...container.querySelectorAll(".task:not(.dragging)")];
-  return items.reduce((closest, child) => {
-    const box = child.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-    if (offset < 0 && offset > closest.offset) {
-      return { offset, element: child };
-    } else {
-      return closest;
-    }
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-function reorderTasks() {
-  const order = [...taskList.children].map(li => +li.dataset.id);
-  tasks.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-}
-
-// BACKGROUND CANVAS ANIMATION (same as before)
-const canvas = document.getElementById("bgCanvas");
-const ctx = canvas.getContext("2d");
-let particles = [];
-
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
-
-for (let i = 0; i < 100; i++) {
-  particles.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    r: Math.random() * 2 + 1,
-    dx: Math.random() - 0.5,
-    dy: Math.random() - 0.5,
-  });
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  for (let p of particles) {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = "rgba(100,100,255,0.5)";
-    ctx.fill();
-    p.x += p.dx;
-    p.y += p.dy;
-    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
-    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+// Theme toggle & remember preference
+function loadTheme() {
+  const savedTheme = localStorage.getItem('planitTheme') || 'light';
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-theme');
+    toggleTheme.checked = true;
+  } else {
+    document.body.classList.remove('dark-theme');
+    toggleTheme.checked = false;
   }
-  requestAnimationFrame(animate);
 }
-animate();
 
-// Initialize with default project
-projects.push("Default");
-currentProject = "Default";
-renderProjects();
-renderTasks();
+toggleTheme.onchange = () => {
+  if (toggleTheme.checked) {
+    document.body.classList.add('dark-theme');
+    localStorage.setItem('planitTheme', 'dark');
+  } else {
+    document.body.classList.remove('dark-theme');
+    localStorage.setItem('planitTheme', 'light');
+  }
+};
+
+// Initialize app
+function init() {
+  loadData();
+  renderProjects();
+  loadTheme();
+  renderTasks();
+}
+
+init();
