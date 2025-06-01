@@ -34,46 +34,13 @@ body {
   background: #222;
 }
 
-/* Glow animated title */
+/* Plain title without glow */
 .glow-title {
   text-align: center;
   font-size: 3.5rem;
-  color: #00f6ff;
-  text-shadow:
-    0 0 5px #00f6ff,
-    0 0 10px #00f6ff,
-    0 0 20px #00f6ff,
-    0 0 40px #0ff,
-    0 0 80px #0ff,
-    0 0 90px #0ff,
-    0 0 100px #0ff;
-  animation: glowPulse 2.5s ease-in-out infinite alternate;
+  color: #007bff;  /* Changed color to a nice blue */
   margin-bottom: 25px;
-}
-
-@keyframes glowPulse {
-  from {
-    text-shadow:
-      0 0 5px #00f6ff,
-      0 0 10px #00f6ff,
-      0 0 20px #00f6ff,
-      0 0 40px #0ff,
-      0 0 80px #0ff,
-      0 0 90px #0ff,
-      0 0 100px #0ff;
-    color: #00f6ff;
-  }
-  to {
-    text-shadow:
-      0 0 15px #00f6ff,
-      0 0 30px #00f6ff,
-      0 0 45px #0ff,
-      0 0 70px #0ff,
-      0 0 90px #0ff,
-      0 0 120px #0ff,
-      0 0 150px #0ff;
-    color: #33f0ff;
-  }
+  font-weight: 700;
 }
 
 /* Theme toggle switch */
@@ -148,11 +115,11 @@ body {
 
 .project-bar input[type="text"]:focus {
   outline: none;
-  border-color: #00f6ff;
+  border-color: #007bff; /* changed to match title blue */
 }
 
 .project-bar button {
-  background-color: #00f6ff;
+  background-color: #28a745;  /* Changed from blue to green */
   border: none;
   color: white;
   font-size: 1.2rem;
@@ -163,7 +130,7 @@ body {
 }
 
 .project-bar button:hover {
-  background-color: #009edc;
+  background-color: #1e7e34;
 }
 
 .project-bar select {
@@ -178,7 +145,7 @@ body {
 
 .project-bar select:focus {
   outline: none;
-  border-color: #00f6ff;
+  border-color: #007bff;
 }
 
 .dark-theme .project-bar input[type="text"],
@@ -190,7 +157,7 @@ body {
 
 .dark-theme .project-bar input[type="text"]:focus,
 .dark-theme .project-bar select:focus {
-  border-color: #00f6ff;
+  border-color: #007bff;
 }
 
 /* Task bar */
@@ -217,11 +184,11 @@ body {
 .task-bar input[type="date"]:focus,
 .task-bar select:focus {
   outline: none;
-  border-color: #00f6ff;
+  border-color: #007bff;
 }
 
 .task-bar button {
-  background-color: #00f6ff;
+  background-color: #dc3545;  /* Changed from blue to red */
   border: none;
   color: white;
   font-size: 1.1rem;
@@ -234,7 +201,7 @@ body {
 }
 
 .task-bar button:hover {
-  background-color: #009edc;
+  background-color: #a71d2a;
 }
 
 .dark-theme .task-bar input,
@@ -246,7 +213,7 @@ body {
 
 .dark-theme .task-bar input:focus,
 .dark-theme .task-bar select:focus {
-  border-color: #00f6ff;
+  border-color: #007bff;
 }
 
 /* Task List */
@@ -256,7 +223,7 @@ body {
   overflow-y: auto;
   padding-right: 5px;
   scrollbar-width: thin;
-  scrollbar-color: #00f6ff transparent;
+  scrollbar-color: #007bff transparent;
 }
 
 #taskList::-webkit-scrollbar {
@@ -264,7 +231,7 @@ body {
 }
 
 #taskList::-webkit-scrollbar-thumb {
-  background-color: #00f6ff;
+  background-color: #007bff;
   border-radius: 10px;
 }
 
@@ -284,7 +251,7 @@ body {
 .task.dragging {
   opacity: 0.7;
   cursor: grabbing;
-  box-shadow: 0 0 10px #00f6ff;
+  box-shadow: 0 0 10px #007bff;
 }
 
 .task input[type="checkbox"] {
