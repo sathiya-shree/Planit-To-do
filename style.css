@@ -1,404 +1,139 @@
-/* Base reset and fonts */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #f0f2f5;
-  color: #333;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  position: relative;
-  overflow-x: hidden;
-}
+let width, height;
+let particles = [];
+const particleCount = 80;
+const maxVelocity = 0.5;
+const particleRadius = 3;
 
-/* Background animation: subtle moving gradient circles */
-body::before {
-  content: '';
-  position: fixed;
-  top: -100px;
-  left: -100px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle at center, #007bff55 0%, transparent 70%);
-  animation: pulse 15s ease-in-out infinite;
-  z-index: -2;
-  border-radius: 50%;
-}
+let bgGradientLight, bgGradientDark;
 
-body::after {
-  content: '';
-  position: fixed;
-  bottom: -100px;
-  right: -100px;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle at center, #00c49f55 0%, transparent 70%);
-  animation: pulse2 20s ease-in-out infinite;
-  z-index: -2;
-  border-radius: 50%;
-}
+function resizeCanvas() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.7; }
-  50% { transform: scale(1.2) translate(10px, 10px); opacity: 0.5; }
-}
+  // Create gradients for light and dark modes
+  bgGradientLight = ctx.createLinearGradient(0, 0, width, height);
+  bgGradientLight.addColorStop(0, '#74ebd5');
+  bgGradientLight.addColorStop(1, '#ACB6E5');
 
-@keyframes pulse2 {
-  0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.6; }
-  50% { transform: scale(1.3) translate(-15px, -15px); opacity: 0.4; }
+  bgGradientDark = ctx.createLinearGradient(0, 0, width, height);
+  bgGradientDark.addColorStop(0, '#0f2027');
+  bgGradientDark.addColorStop(0.5, '#203a43');
+  bgGradientDark.addColorStop(1, '#2c5364');
 }
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-/* Container for app */
-.container {
-  width: 100%;
-  max-width: 700px;
-  background: white;
-  padding: 25px 30px;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-  z-index: 10;
-}
+class Particle {
+  constructor() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.vx = (Math.random() * 2 - 1) * maxVelocity;
+    this.vy = (Math.random() * 2 - 1) * maxVelocity;
+    this.radius = particleRadius;
+    this.color = 'rgba(0,0,0,0.3)'; // will update dynamically
+  }
 
-/* Header */
-h1.planit-title {
-  font-weight: 700;
-  color: #007bff;
-  margin-bottom: 15px;
-  text-align: center;
-}
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
 
-/* Project bar */
-.project-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
+    if (this.x < this.radius || this.x > width - this.radius) this.vx *= -1;
+    if (this.y < this.radius || this.y > height - this.radius) this.vy *= -1;
 
-.project-bar input,
-.project-bar select,
-.project-bar button {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
 
-.project-bar input:focus,
-.project-bar select:focus {
-  outline: none;
-  border-color: #0056b3;
-}
+      if (dist < mouse.radius) {
+        const angle = Math.atan2(dy, dx);
+        const force = (mouse.radius - dist) / mouse.radius;
+        this.vx += Math.cos(angle) * force * 0.5;
+        this.vy += Math.sin(angle) * force * 0.5;
+        this.vx = Math.min(Math.max(this.vx, -maxVelocity), maxVelocity);
+        this.vy = Math.min(Math.max(this.vy, -maxVelocity), maxVelocity);
+      }
+    }
+  }
 
-.project-bar button {
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  border: none;
-  min-width: 90px;
-}
-
-.project-bar button:hover {
-  background-color: #0056b3;
-  transition: background-color 0.3s ease;
-}
-
-/* Task bar */
-.task-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.task-bar input,
-.task-bar select,
-.task-bar button {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-.task-bar input:focus,
-.task-bar select:focus {
-  outline: none;
-  border-color: #0056b3;
-}
-
-.task-bar button {
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
-  border: none;
-  min-width: 80px;
-}
-
-.task-bar button:hover {
-  background-color: #0056b3;
-  transition: background-color 0.3s ease;
-}
-
-/* Search input */
-#searchInput {
-  width: 100%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 2px solid #007bff;
-  border-radius: 8px;
-  transition: border-color 0.3s ease;
-  margin-bottom: 20px;
-}
-
-#searchInput:focus {
-  outline: none;
-  border-color: #0056b3;
-}
-
-/* Project select dropdown */
-#projectSelect {
-  padding: 8px 12px;
-  font-size: 1rem;
-  border: 2px solid #007bff;
-  border-radius: 5px;
-  cursor: pointer;
-  background: white;
-  min-width: 140px;
-  transition: border-color 0.3s ease;
-}
-
-#projectSelect:focus {
-  outline: none;
-  border-color: #0056b3;
-}
-
-/* Task list */
-#taskList {
-  list-style: none;
-  max-height: 350px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-#taskList li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-bottom: 1px solid #ddd;
-  position: relative;
-  background: #fafafa;
-  border-radius: 6px;
-  margin-bottom: 8px;
-  user-select: none;
-}
-
-#taskList li:last-child {
-  margin-bottom: 0;
-  border-bottom: none;
-}
-
-#taskList li:hover {
-  background: #e8f0fe;
-}
-
-#taskList li input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-#taskList li span {
-  flex-grow: 1;
-  font-size: 1rem;
-  word-break: break-word;
-}
-
-#taskList li span.tag {
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 0.8rem;
-  color: white;
-  font-weight: 600;
-  user-select: none;
-}
-
-.tag.Work {
-  background-color: #007bff;
-}
-
-.tag.Urgent {
-  background-color: #dc3545;
-}
-
-.tag.Personal {
-  background-color: #6f42c1;
-}
-
-.tag.Low {
-  background-color: #28a745;
-}
-
-#taskList li button.remove-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  color: #dc3545;
-  cursor: pointer;
-  padding: 0 6px;
-  user-select: none;
-}
-
-#taskList li button.remove-btn:hover {
-  color: #a71d2a;
-}
-
-/* Theme toggle */
-.theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  user-select: none;
-  z-index: 20;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.theme-toggle label {
-  font-weight: 600;
-  color: #555;
-  cursor: pointer;
-}
-
-input#toggle-theme {
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-}
-
-/* Dark theme styles */
-body.dark {
-  background: #121212;
-  color: #ddd;
-}
-
-body.dark .container {
-  background: #1e1e1e;
-  box-shadow: 0 6px 20px rgba(255 255 255 / 0.1);
-}
-
-body.dark input,
-body.dark select {
-  background: #333;
-  border-color: #555;
-  color: #ddd;
-}
-
-body.dark input:focus,
-body.dark select:focus {
-  border-color: #bbb;
-}
-
-body.dark #taskList li {
-  background: #222;
-  border-color: #333;
-}
-
-body.dark #taskList li:hover {
-  background: #333;
-}
-
-body.dark .tag.Work {
-  background-color: #3399ff;
-}
-
-body.dark .tag.Urgent {
-  background-color: #ff6666;
-}
-
-body.dark .tag.Personal {
-  background-color: #a366ff;
-}
-
-body.dark .tag.Low {
-  background-color: #5cd65c;
-}
-
-body.dark .project-bar button,
-body.dark .task-bar button {
-  background-color: #3399ff;
-}
-
-body.dark .project-bar button:hover,
-body.dark .task-bar button:hover {
-  background-color: #1a75ff;
-}
-
-body.dark #searchInput {
-  background: #333;
-  border-color: #555;
-  color: #ddd;
-}
-
-/* Scrollbar styling for task list */
-#taskList::-webkit-scrollbar {
-  width: 8px;
-}
-
-#taskList::-webkit-scrollbar-thumb {
-  background: #007bff66;
-  border-radius: 4px;
-}
-
-body.dark #taskList::-webkit-scrollbar-thumb {
-  background: #3399ff88;
-}
-/* Fullscreen canvas for background animation */
-#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1; /* behind everything */
-  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-}
-
-/* Fade-in animation for task list items */
-#taskList li {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeInUp 0.4s forwards;
-}
-
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color.replace(/0\.3|0\.7/, '0.5'); // shadow with opacity 0.5
+    ctx.shadowBlur = 8;
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
   }
 }
 
-/* Smooth button hover */
-button {
-  transition: background-color 0.3s ease, transform 0.15s ease;
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
 }
+initParticles();
 
-button:hover {
-  transform: scale(1.05);
-}
+const mouse = { x: null, y: null, radius: 100 };
 
-/* Checkbox scale on hover */
-input[type="checkbox"]:hover {
-  transform: scale(1.2);
-  transition: transform 0.2s ease;
+window.addEventListener('mousemove', (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+window.addEventListener('mouseout', () => {
+  mouse.x = null;
+  mouse.y = null;
+});
+
+function animateParticles() {
+  const isDark = document.body.classList.contains('dark-mode');
+
+  // Set background gradient based on mode
+  ctx.fillStyle = isDark ? bgGradientDark : bgGradientLight;
+  ctx.fillRect(0, 0, width, height);
+
+  // Set particle and line colors
+  const particleColor = isDark
+    ? 'rgba(255, 255, 255, 0.7)'
+    : 'rgba(0, 0, 0, 0.3)';
+
+  const lineColorBase = isDark ? '255,255,255' : '0,0,0';
+
+  // Update and draw particles
+  for (let i = 0; i < particleCount; i++) {
+    const p1 = particles[i];
+    p1.color = particleColor;
+    p1.update();
+    p1.draw();
+
+    // Draw lines to nearby particles
+    for (let j = i + 1; j < particleCount; j++) {
+      const p2 = particles[j];
+      const dx = p1.x - p2.x;
+      const dy = p1.y - p2.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${lineColorBase},${1 - dist / 120})`;
+        ctx.lineWidth = 1;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(animateParticles);
 }
+animateParticles();
+
+// Dark mode toggle button
+const toggleBtn = document.getElementById('toggleDarkMode');
+toggleBtn.addEventListener('click', () => {
+  document.body.classList.toggle('dark-mode');
+  document.body.classList.toggle('light-mode');
+});
