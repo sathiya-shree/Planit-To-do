@@ -3,42 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlanIt - To-Do App</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Planit - To-Do App</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <h1>PlanIt 📝</h1>
+  <div class="theme-toggle">
+    <label class="switch">
+      <input type="checkbox" id="themeSwitch">
+      <span class="slider round"></span>
+    </label>
+    <span id="themeLabel">Light Mode</span>
+  </div>
 
-    <!-- Project Selector -->
-    <div class="project-controls">
-      <input type="text" id="projectInput" placeholder="Add new project..." />
+  <div class="container">
+    <h1>📋 Planit</h1>
+
+    <div class="project-bar">
+      <input type="text" id="projectInput" placeholder="New Project" />
       <button onclick="addProject()">➕</button>
       <select id="projectSelect"></select>
     </div>
 
-    <!-- Task Input -->
-    <div class="task-input">
-      <input type="text" id="taskInput" placeholder="Add a new task..." />
+    <div class="task-bar">
+      <input id="taskInput" type="text" placeholder="Add a new task" />
       <input type="date" id="dueDate" />
-      <input type="text" id="tagInput" placeholder="Tag (e.g. Work, Urgent)" />
+      <input id="tagInput" type="text" placeholder="Tag (Work, Urgent...)" />
       <select id="prioritySelect">
-        <option value="low">Low</option>
-        <option value="medium" selected>Medium</option>
-        <option value="high">High</option>
+        <option>Low</option>
+        <option>Medium</option>
+        <option>High</option>
       </select>
-      <button onclick="addTask()">Add Task</button>
+      <button onclick="addTask()">Add</button>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="progress-bar">
+    <div class="progress-container">
       <div id="progressFill">0%</div>
     </div>
 
-    <!-- Task List -->
     <ul id="taskList"></ul>
   </div>
 
+  <canvas id="bgCanvas"></canvas>
   <script src="script.js"></script>
 </body>
 </html>
