@@ -1,87 +1,97 @@
-:root {
-  --bg: #f5f7fb;
-  --text: #1e1e1e;
-  --highlight: #0077ff;
-  --card: #ffffff;
-  --low: #c8e6c9;
-  --medium: #fff9c4;
-  --high: #ffcdd2;
-}
-body.dark {
-  --bg: #121212;
-  --text: #e0e0e0;
-  --highlight: #90caf9;
-  --card: #1e1e1e;
-  --low: #2e7d32;
-  --medium: #fbc02d;
-  --high: #c62828;
-}
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f2f2f2;
+  color: #333;
   margin: 0;
   padding: 20px;
-  transition: background 0.3s, color 0.3s;
 }
+
 .container {
   max-width: 700px;
   margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ccc;
 }
-header {
+
+h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.task-input, .project-controls {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-.header-controls button {
-  margin-left: 10px;
-}
-.task-entry {
-  display: flex;
-  flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap;
 }
-.task-entry input,
-.task-entry select,
-#search {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  flex: 1;
-  min-width: 120px;
+
+input, select, button {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
 }
+
 button {
-  padding: 10px 16px;
-  background: var(--highlight);
+  background: #00aaff;
   color: white;
   border: none;
-  border-radius: 6px;
   cursor: pointer;
 }
+
 button:hover {
-  opacity: 0.95;
+  background: #0077cc;
 }
+
 ul {
   list-style: none;
   padding: 0;
 }
+
 li {
-  background: var(--card);
-  padding: 15px;
+  padding: 10px;
+  background: #f9f9f9;
   margin-bottom: 10px;
-  border-left: 6px solid var(--highlight);
-  border-radius: 8px;
+  border-radius: 10px;
+  position: relative;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background 0.2s;
+  flex-direction: column;
 }
+
 .completed {
   text-decoration: line-through;
-  opacity: 0.6;
+  opacity: 0.7;
 }
-.priority-low { border-left-color: var(--low); }
-.priority-medium { border-left-color: var(--medium); }
-.priority-high { border-left-color: var(--high); }
+
+.tag {
+  display: inline-block;
+  padding: 3px 8px;
+  font-size: 12px;
+  margin-top: 5px;
+  border-radius: 8px;
+  color: white;
+  background: #666;
+}
+
+.tag-Work { background: #3498db; }
+.tag-Urgent { background: #e74c3c; }
+.tag-Personal { background: #9b59b6; }
+
+.progress-bar {
+  background: #eee;
+  border-radius: 20px;
+  overflow: hidden;
+  height: 20px;
+  margin-bottom: 20px;
+}
+
+#progressFill {
+  background: #4caf50;
+  height: 100%;
+  width: 0%;
+  text-align: center;
+  color: white;
+  font-size: 12px;
+}
