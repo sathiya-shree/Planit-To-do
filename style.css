@@ -10,11 +10,8 @@ body {
   background: #f0f4f8;
   color: #333;
   min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  transition: background-color 0.3s, color 0.3s;
   padding: 20px;
-  user-select: none;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .dark-theme {
@@ -26,16 +23,15 @@ body {
 .container {
   max-width: 600px;
   margin: 0 auto;
-  background: rgba(255,255,255,0.9);
+  background: #fff;
   padding: 20px 30px;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  backdrop-filter: blur(10px);
   transition: background-color 0.3s;
 }
 
 .dark-theme .container {
-  background: rgba(30,30,30,0.85);
+  background: #222;
 }
 
 /* Glow animated title */
@@ -375,46 +371,25 @@ body {
   color: #aaa;
 }
 
-/* Canvas full screen behind */
-#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Scrollbar styling for container if needed */
-.container::-webkit-scrollbar {
-  width: 8px;
-}
-.container::-webkit-scrollbar-thumb {
-  background: #00f6ff;
-  border-radius: 10px;
-}
-
 /* Responsive */
 @media (max-width: 650px) {
   .task-bar {
     flex-direction: column;
   }
-
+  
   .task-bar input,
   .task-bar select,
   .task-bar button {
-    width: 100%;
-    min-width: auto;
+    min-width: 100%;
   }
-  
+
   .project-bar {
     flex-direction: column;
   }
-  
+
   .project-bar input,
   .project-bar select,
   .project-bar button {
-    width: 100%;
+    min-width: 100%;
   }
 }
