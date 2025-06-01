@@ -297,6 +297,137 @@ toggleTheme.addEventListener('change', () => {
   }
 });
 
+// Background canvas animation with floating particles
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+
+let width, height;
+let particles = [];
+const particleCount = 80;
+const maxVelocity = 0.5;
+const particleRadius = 3;
+
+function resizeCanvas() {
+  width = canvas.width = window.innerWidth;
+  height = canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// Particle class
+class Particle {
+  constructor() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.vx = (Math.random() * 2 - 1) * maxVelocity;
+    this.vy = (Math.random() * 2 - 1) * maxVelocity;
+    this.radius = particleRadius;
+    this.baseRadius = particleRadius;
+    this.color = 'rgba(255, 255, 255, 0.7)';
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Bounce off edges
+    if (this.x < this.radius || this.x > width - this.radius) this.vx *= -1;
+    if (this.y < this.radius || this.y > height - this.radius) this.vy *= -1;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = 'rgba(255,255,255,0.5)';
+    ctx.shadowBlur = 8;
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// Create particles
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < particleCount; i++) {
+    particles.push(new Particle());
+  }
+}
+initParticles();
+
+// Animate particles
+function animateParticles() {
+  ctx.clearRect(0, 0, width, height);
+
+  // Draw lines between close particles
+  for (let i = 0; i < particleCount; i++) {
+    const p1 = particles[i];
+    p1.update();
+    p1.draw();
+
+    for (let j = i + 1; j < particleCount; j++) {
+      const p2 = particles[j];
+      const dx = p1.x - p2.x;
+      const dy = p1.y - p2.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(255,255,255,${1 - dist / 120})`;
+        ctx.lineWidth = 1;
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// Interactivity: particles repel from mouse pointer
+const mouse = { x: null, y: null, radius: 100 };
+
+window.addEventListener('mousemove', (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+window.addEventListener('mouseout', () => {
+  mouse.x = null;
+  mouse.y = null;
+});
+
+// Modify particle update to react to mouse
+Particle.prototype.update = function () {
+  // Move normally
+  this.x += this.vx;
+  this.y += this.vy;
+
+  // Bounce off edges
+  if (this.x < this.radius || this.x > width - this.radius) this.vx *= -1;
+  if (this.y < this.radius || this.y > height - this.radius) this.vy *= -1;
+
+  // Interaction with mouse
+  if (mouse.x !== null && mouse.y !== null) {
+    const dx = this.x - mouse.x;
+    const dy = this.y - mouse.y;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+
+    if (dist < mouse.radius) {
+      // Push particle away from mouse
+      const angle = Math.atan2(dy, dx);
+      const force = (mouse.radius - dist) / mouse.radius;
+      this.vx += Math.cos(angle) * force * 0.5;
+      this.vy += Math.sin(angle) * force * 0.5;
+
+      // Limit velocity to maxVelocity
+      this.vx = Math.min(Math.max(this.vx, -maxVelocity), maxVelocity);
+      this.vy = Math.min(Math.max(this.vy, -maxVelocity), maxVelocity);
+    }
+  }
+};
+
+
 // Initial load
 loadProjects();
 populateProjects();
