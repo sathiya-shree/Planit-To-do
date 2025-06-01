@@ -84,8 +84,6 @@ function renderTasks() {
     addDragEvents(li);
     taskList.appendChild(li);
   });
-
-  updateProgress(relevant);
 }
 
 function toggleTask(id) {
@@ -97,15 +95,6 @@ function toggleTask(id) {
 function removeTask(id) {
   tasks = tasks.filter(t => t.id !== id);
   renderTasks();
-}
-
-function updateProgress(list) {
-  const total = list.length;
-  const done = list.filter(t => t.done).length;
-  const percent = total ? Math.round((done / total) * 100) : 0;
-  const fill = document.getElementById("progressFill");
-  fill.style.width = percent + "%";
-  fill.textContent = percent + "%";
 }
 
 // DRAG AND DROP
@@ -149,7 +138,7 @@ function reorderTasks() {
   tasks.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
 }
 
-// BACKGROUND CANVAS ANIMATION
+// BACKGROUND CANVAS ANIMATION (same as before)
 const canvas = document.getElementById("bgCanvas");
 const ctx = canvas.getContext("2d");
 let particles = [];
@@ -186,3 +175,9 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
+
+// Initialize with default project
+projects.push("Default");
+currentProject = "Default";
+renderProjects();
+renderTasks();
