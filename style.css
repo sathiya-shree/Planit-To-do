@@ -360,3 +360,25 @@ body {
     min-width: 100%;
   }
 }
+
+@media (max-width: 480px) {
+  .project-bar, .task-bar {
+    flex-direction: column;
+  }
+
+  .project-bar input,
+  .project-bar select,
+  .project-bar button,
+  .task-bar input,
+  .task-bar select,
+  .task-bar button {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .theme-toggle {
+    position: static;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+}
