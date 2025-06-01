@@ -1,28 +1,45 @@
-const CACHE_NAME = 'planit-cache-v1';
-const urlsToCache = [
-  '.',
-  'index.html',
-  'style.css',
-  'script.js',
-  'manifest.json',
-  // Add icons too if used
-  'icon-192.png',
-  'icon-512.png',
-  'https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js'
-];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planit - To-Do App</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+  <div class="theme-toggle">
+    <label for="toggle-theme">Dark Mode</label>
+    <input type="checkbox" id="toggle-theme" />
+  </div>
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-    })
-  );
-});
+  <div class="container">
+    <h1 class="planit-title">Planit</h1>
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
+    <div class="project-bar">
+      <input type="text" id="projectInput" placeholder="New Project Name" />
+      <button id="addProjectBtn">Add Project</button>
+      <select id="projectSelect"></select>
+    </div>
+
+    <div class="task-bar">
+      <input type="text" id="taskInput" placeholder="New Task Name" />
+      <select id="tagSelect">
+        <option value="Work">Work</option>
+        <option value="Urgent">Urgent</option>
+        <option value="Personal">Personal</option>
+        <option value="Low">Low</option>
+      </select>
+      <input type="date" id="dueDateInput" />
+      <button id="addTaskBtn">+</button>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Search tasks..." />
+
+    <ul id="taskList"></ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
