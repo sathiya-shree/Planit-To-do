@@ -7,11 +7,13 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
 </head>
-<body>
+<body class="light-mode">
+
   <div class="theme-toggle">
     <label for="toggle-theme">Dark Mode</label>
     <input type="checkbox" id="toggle-theme" />
   </div>
+
   <canvas id="bgCanvas"></canvas>
 
   <div class="container">
@@ -20,27 +22,28 @@
     <div class="project-bar">
       <input type="text" id="projectInput" placeholder="New Project Name" />
       <button id="addProjectBtn">Add Project</button>
-      <select id="projectSelect"></select>
+      <select id="projectSelect" aria-label="Select Project"></select>
     </div>
 
     <div class="task-bar">
       <input type="text" id="taskInput" placeholder="New Task Name" />
-      <select id="tagSelect">
+      <select id="tagSelect" aria-label="Select Tag">
         <option value="Work">Work</option>
         <option value="Urgent">Urgent</option>
         <option value="Personal">Personal</option>
         <option value="Low">Low</option>
       </select>
       <input type="date" id="dueDateInput" />
-      <button id="addTaskBtn">+</button>
+      <button id="addTaskBtn" aria-label="Add Task">+</button>
     </div>
 
-    <input type="text" id="searchInput" placeholder="Search tasks..." />
+    <input type="text" id="searchInput" placeholder="Search tasks..." aria-label="Search tasks" />
 
-    <ul id="taskList"></ul>
+    <ul id="taskList" aria-live="polite"></ul>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script src="script.js"></script>
+
 </body>
 </html>
