@@ -1,0 +1,45 @@
+/* style.css */
+:root {
+  --bg: #ffffff;
+  --text: #000000;
+  --highlight: #0077ff;
+}
+body.dark {
+  --bg: #121212;
+  --text: #f0f0f0;
+  --highlight: #90caf9;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+.container {
+  max-width: 600px;
+  margin: auto;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.task-entry input {
+  margin: 5px;
+  padding: 8px;
+}
+button {
+  padding: 8px;
+  background: var(--highlight);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  opacity: 0.9;
+}
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
