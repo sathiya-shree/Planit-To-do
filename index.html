@@ -6,20 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PlanIt - Smart To-Do</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <header>
       <h1>📝 PlanIt</h1>
-      <button id="toggle-theme">🌗</button>
+      <div class="header-controls">
+        <button id="toggle-theme">🌗 Theme</button>
+        <button id="clear-completed">🧹 Clear Completed</button>
+      </div>
     </header>
     <div class="task-entry">
       <input type="text" id="task-input" placeholder="Add a new task...">
       <input type="date" id="task-date">
       <input type="text" id="task-tag" placeholder="Tag">
-      <button onclick="addTask()">➕</button>
+      <select id="priority">
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+      <button onclick="addTask()">➕ Add</button>
     </div>
-    <input type="text" id="search" placeholder="Search tasks...">
+    <input type="text" id="search" placeholder="🔍 Search tasks...">
     <ul id="task-list"></ul>
   </div>
   <script src="script.js"></script>
