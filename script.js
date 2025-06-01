@@ -1,4 +1,12 @@
 // Keep your data model
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(() => console.log('Service Worker Registered'))
+      .catch(err => console.log('Service Worker registration failed:', err));
+  });
+}
 const projectInput = document.getElementById('projectInput');
 const addProjectBtn = document.getElementById('addProjectBtn');
 const projectSelect = document.getElementById('projectSelect');
