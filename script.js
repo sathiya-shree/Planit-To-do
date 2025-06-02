@@ -1,72 +1,68 @@
-// Elements
-const addProjectBtn = document.getElementById('addProjectBtn');
-const projectInput = document.getElementById('projectInput');
-const projectSelect = document.getElementById('projectSelect');
-const addTaskBtn = document.getElementById('addTaskBtn');
-const taskInput = document.getElementById('taskInput');
-const tagSelect = document.getElementById('tagSelect');
-const dueDateInput = document.getElementById('dueDateInput');
-const taskList = document.getElementById('taskList');
-const searchInput = document.getElementById('searchInput');
-const toggleTheme = document.getElementById('toggle-theme');
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Projects
-let projects = [];
-let tasks = [];
+function renderTasks(filter = 'all') {
+  const list = document.getElementById("task-list");
+  list.innerHTML = "";
+  tasks.forEach((task, index) => {
+    if (filter === "completed" && !task.completed) return;
+    if (filter === "active" && task.completed) return;
 
-addProjectBtn.addEventListener('click', () => {
-  const project = projectInput.value.trim();
-  if (project && !projects.includes(project)) {
-    projects.push(project);
-    const option = document.createElement('option');
-    option.value = option.text = project;
-    projectSelect.appendChild(option);
-    projectInput.value = '';
-  }
-});
+    const li = document.createElement("li");
+    li.className = task.completed ? "completed" : "";
 
-// Add task
-addTaskBtn.addEventListener('click', () => {
-  const task = taskInput.value.trim();
-  const tag = tagSelect.value;
-  const dueDate = dueDateInput.value;
-  const project = projectSelect.value;
-
-  if (task) {
-    const li = document.createElement('li');
-
-    const checkbox = document.createElement('input');
-    checkbox.type = 'checkbox';
-
-    const span = document.createElement('span');
-    span.textContent = `${task} (${dueDate || "No date"}) [${project || "No project"}]`;
-
-    const tagSpan = document.createElement('span');
-    tagSpan.className = `tag ${tag}`;
-    tagSpan.textContent = tag;
-
-    const removeBtn = document.createElement('button');
-    removeBtn.className = 'remove-btn';
-    removeBtn.innerHTML = '&times;';
-    removeBtn.onclick = () => li.remove();
-
-    li.append(checkbox, span, tagSpan, removeBtn);
-    taskList.appendChild(li);
-
-    taskInput.value = '';
-    dueDateInput.value = '';
-  }
-});
-
-// Search
-searchInput.addEventListener('input', () => {
-  const query = searchInput.value.toLowerCase();
-  document.querySelectorAll('#taskList li').forEach(li => {
-    li.style.display = li.textContent.toLowerCase().includes(query) ? '' : 'none';
+    li.innerHTML = `
+      <span onclick="toggleComplete(${index})">${task.text}</span>
+      <div>
+        <button onclick="deleteTask(${index})"><i class="fas fa-trash"></i></button>
+      </div>
+    `;
+    list.appendChild(li);
   });
-});
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
 
-// Theme toggle
-toggleTheme.addEventListener('change', () => {
-  document.body.classList.toggle('dark-mode', toggleTheme.checked);
-});
+function addTask() {
+  const input = document.getElementById("task-input");
+  const text = input.value.trim();
+  if (!text) return;
+
+  tasks.push({ text, completed: false });
+  input.value = "";
+  renderTasks();
+}
+
+function toggleComplete(index) {
+  tasks[index].completed = !tasks[index].completed;
+  renderTasks();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  renderTasks();
+}
+
+function clearCompleted() {
+  tasks = tasks.filter(task => !task.completed);
+  renderTasks();
+}
+
+function filterTasks(type) {
+  renderTasks(type);
+}
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const currentBg = getComputedStyle(root).getPropertyValue('--bg').trim();
+  if (currentBg === '#1f1f1f') {
+    root.style.setProperty('--bg', '#f9f9f9');
+    root.style.setProperty('--text', '#1f1f1f');
+    root.style.setProperty('--card', '#ffffff');
+  } else {
+    root.style.setProperty('--bg', '#1f1f1f');
+    root.style.setProperty('--text', '#f0f0f0');
+    root.style.setProperty('--card', '#2a2a2a');
+  }
+}
+
+document.getElementById("add-btn").addEventListener("click", addTask);
+window.onload = () => renderTasks();
