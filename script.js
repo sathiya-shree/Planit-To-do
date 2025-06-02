@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Journal Save
-const journal = document.getElementById("journal");
+const journal = document.getElementById("daily-journal");
 journal.value = localStorage.getItem("journal") || "";
 journal.addEventListener("input", () => {
   localStorage.setItem("journal", journal.value);
