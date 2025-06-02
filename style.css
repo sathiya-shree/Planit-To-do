@@ -1,27 +1,252 @@
-/* Pomodoro Timer Styles */
-.pomodoro-timer {
-  margin-top: 20px;
-  text-align: center;
+/* Global Reset and Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-#timer-display {
-  font-size: 2em;
-  margin: 10px 0;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #121212;
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 80px;
+  z-index: 1;
 }
 
-.timer-controls button {
-  margin: 0 5px;
-  padding: 10px 20px;
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 2rem;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  margin-top: 40px;
+  z-index: 2;
+  position: relative;
 }
 
-/* Search Group Styles */
-.search-group {
+/* Theme Toggle */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+/* Task Input Group */
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 20px 0;
+}
+
+.input-group input,
+.input-group select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+}
+
+.input-group button {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Task List */
+ul#task-list {
+  list-style: none;
+  margin-top: 10px;
+}
+
+ul#task-list li {
+  background: #222;
+  margin: 10px 0;
+  padding: 10px;
+  border-left: 5px solid #1e88e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-radius: 5px;
+}
+
+ul#task-list li:hover {
+  background: #2a2a2a;
+}
+
+ul#task-list li.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.task-category {
+  font-weight: bold;
+  color: #ffb74d;
+}
+
+/* Delete Button */
+ul#task-list button {
+  background: none;
+  border: none;
+  color: #f44336;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+/* Footer Buttons */
+.footer {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.footer button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: #444;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.footer button:hover {
+  background: #666;
+}
+
+/* Journal Section */
+.journal-section {
+  margin-top: 30px;
+}
+
+.journal-section textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 15px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  background: #1e1e1e;
+  color: #fff;
+  resize: vertical;
+}
+
+/* Quote */
+.quote {
   text-align: center;
+  font-style: italic;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.quote p {
+  margin: 5px 0;
+}
+
+/* Onboarding Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: #333;
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.modal-content button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #1e88e5;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Search Group */
+.search-group {
+  text-align: center;
+  margin: 20px 0;
 }
 
 .search-group input {
-  width: 80%;
+  width: 90%;
   padding: 10px;
-  font-size: 1em;
+  border-radius: 5px;
+  font-size: 1rem;
+  border: none;
+}
+
+/* Pomodoro Timer */
+.pomodoro-timer {
+  margin: 30px 0;
+  text-align: center;
+}
+
+.pomodoro-timer h2 {
+  margin-bottom: 10px;
+}
+
+#timer-display {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+
+.timer-controls button {
+  padding: 10px 20px;
+  margin: 0 5px;
+  background: #43a047;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.timer-controls button:hover {
+  background: #66bb6a;
+}
+
+/* Calendar Styling */
+#calendar {
+  max-width: 700px;
+  margin: 30px auto 0 auto;
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Starfield Canvas */
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
 }
