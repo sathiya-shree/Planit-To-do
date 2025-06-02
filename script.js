@@ -6,6 +6,7 @@ let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const taskList = document.getElementById("task-list");
 const input = document.getElementById("task-input");
 const addBtn = document.getElementById("add-btn");
+const categorySelect = document.getElementById("category-select");
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -15,14 +16,14 @@ function renderTasks() {
   taskList.innerHTML = "";
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
-    li.textContent = task.text;
+    li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
     if (task.completed) li.classList.add("completed");
 
     li.addEventListener("click", () => toggleTask(index));
     const delBtn = document.createElement("button");
     delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
     delBtn.onclick = (e) => {
-      e.stopPropagation(); // avoid toggling when deleting
+      e.stopPropagation();
       deleteTask(index);
     };
     li.appendChild(delBtn);
@@ -30,12 +31,14 @@ function renderTasks() {
   });
 
   updateProductivity();
+  updateCalendar();
 }
 
 function addTask() {
   const text = input.value.trim();
+  const category = categorySelect.value;
   if (!text) return;
-  tasks.push({ text, completed: false, date: getToday() });
+  tasks.push({ text, category, completed: false, date: getToday() });
   saveTasks();
   renderTasks();
   input.value = "";
@@ -63,7 +66,7 @@ function filterTasks(type) {
     taskList.innerHTML = "";
     filtered.forEach((task, index) => {
       const li = document.createElement("li");
-      li.textContent = task.text;
+      li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
       if (task.completed) li.classList.add("completed");
       li.addEventListener("click", () => toggleTask(index));
       const delBtn = document.createElement("button");
@@ -92,13 +95,12 @@ input.addEventListener("keydown", e => {
 renderTasks();
 
 // ==========================
-// Quote of the Day by Mood
+// Quote of the Day
 // ==========================
 
 async function fetchQuote() {
-  const mood = document.getElementById("mood-select")?.value || "inspirational";
   try {
-    const res = await fetch(`https://api.quotable.io/random?tags=${mood}`);
+    const res = await fetch("https://api.quotable.io/random");
     const data = await res.json();
     document.getElementById("quote-text").textContent = `"${data.content}"`;
     document.getElementById("quote-author").textContent = `— ${data.author}`;
@@ -107,10 +109,7 @@ async function fetchQuote() {
     document.getElementById("quote-author").textContent = "";
   }
 }
-
-window.addEventListener("DOMContentLoaded", () => {
-  fetchQuote();
-});
+fetchQuote();
 
 // ==========================
 // Productivity Tracker
@@ -121,25 +120,6 @@ function getToday() {
 }
 
 function updateProductivity() {
-  const today = getToday();
-  const count = tasks.filter(t => t.completed && t.date === today).length;
-  document.getElementById("tasks-today").textContent = count;
-}
-
-// ==========================
-// Theme Toggle
-// ==========================
-
-function toggleTheme() {
-  const root = document.documentElement;
-  const isDark = getComputedStyle(root).getPropertyValue("--bg") === "#1f1f1f";
-  if (isDark) {
-    root.style.setProperty("--bg", "#f4f4f4");
-    root.style.setProperty("--text", "#1f1f1f");
-    root.style.setProperty("--card", "#ffffff");
-  } else {
-    root.style.setProperty("--bg", "#1f1f1f");
-    root.style.setProperty("--text", "#f0f0f0");
-    root.style.setProperty("--card", "#2a2a2a");
-  }
-}
+  const today = getToday
+::contentReference[oaicite:0]{index=0}
+ 
