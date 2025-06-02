@@ -1,47 +1,46 @@
-* {
+/* Reset and base styles */
+body, html {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1a1a1a;
+  color: white;
+  overflow-x: hidden;
 }
 
-body, html {
-  height: 100%;
-  font-family: 'Segoe UI', sans-serif;
-  color: white;
+/* Starfield banner container */
+.starfield-container {
+  position: relative;
+  height: 300px;
   overflow: hidden;
-  background: #0a0a1a;
 }
 
 #starfield {
-  position: fixed;
+  position: absolute;
   top: 0; left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
-  background: black;
+  z-index: 0;
 }
 
-.container {
-  display: flex;
-  justify-content: space-between;
-  padding: 60px 100px;
-  height: 100vh;
+.starfield-overlay {
+  position: relative;
+  z-index: 1;
+  text-align: left;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 70px 20px 0 20px;
 }
 
-.welcome-section {
-  max-width: 35%;
-  margin-top: 80px;
-}
-
-.welcome-section h1 {
+.starfield-overlay h1 {
   font-size: 2em;
-  margin-bottom: 15px;
-  font-weight: bold;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
 
-.welcome-section p {
+.starfield-overlay p {
   font-size: 1em;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .start-btn {
@@ -52,8 +51,21 @@ body, html {
   font-weight: bold;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
+.start-btn:hover {
+  background: #00c7d4;
+}
+
+/* Main content area */
+.main-content {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+/* To-Do App box */
 .todo-app {
   background: #2b2b2b;
   padding: 30px;
@@ -64,73 +76,108 @@ body, html {
 
 .todo-app h2 {
   color: #00eaff;
-  margin-bottom: 10px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
-.todo-app blockquote {
+blockquote {
   font-style: italic;
-  margin-bottom: 20px;
+  font-size: 0.95em;
+  color: #ccc;
+  margin-bottom: 25px;
 }
 
 .input-row {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   margin-bottom: 15px;
 }
 
-.input-row input, .input-row select {
-  padding: 8px;
-  flex: 1;
-  border-radius: 5px;
+input, select, button {
   border: none;
-  outline: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 1em;
 }
 
-.input-row button {
-  background: #00eaff;
-  border: none;
-  padding: 8px 12px;
+#task-input {
+  flex: 1;
+}
+
+#add-btn {
+  background-color: #00eaff;
+  color: black;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 5px;
 }
 
-#task-list {
+#add-btn:hover {
+  background-color: #00c7d4;
+}
+
+ul#task-list {
   list-style: none;
-  margin-bottom: 15px;
-  max-height: 150px;
-  overflow-y: auto;
+  padding-left: 0;
+  margin-top: 10px;
 }
 
-#task-list li {
+ul#task-list li {
+  background: #3a3a3a;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
   display: flex;
   justify-content: space-between;
-  background: #444;
-  padding: 8px;
-  margin-bottom: 6px;
-  border-radius: 5px;
+  align-items: center;
   cursor: pointer;
 }
 
-#task-list li.completed {
+ul#task-list li.completed {
   text-decoration: line-through;
-  color: #aaa;
+  opacity: 0.6;
+}
+
+.task-category {
+  font-weight: bold;
+  margin-right: 8px;
+  color: #00eaff;
+}
+
+ul#task-list li button {
+  background: none;
+  border: none;
+  color: #ff4d4d;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.filter-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
 }
 
 .filter-buttons button {
-  margin: 4px 4px 10px 0;
+  flex: 1;
+  margin: 0 4px;
   background: #00eaff;
-  color: #000;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
+  color: black;
+  font-weight: bold;
   cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 0;
 }
 
-textarea {
+.filter-buttons button:hover {
+  background: #00c7d4;
+}
+
+/* Journal */
+#daily-journal {
   width: 100%;
   padding: 10px;
-  resize: none;
-  border-radius: 5px;
-  border: none;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-family: inherit;
+  resize: vertical;
 }
