@@ -133,3 +133,64 @@ function drawStars() {
   requestAnimationFrame(drawStars);
 }
 drawStars();
+
+// Pomodoro Timer
+let timer;
+let timeLeft = 1500; // 25 minutes in seconds
+let isRunning = false;
+
+function startTimer() {
+  if (isRunning) return;
+  isRunning = true;
+  timer = setInterval(() => {
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      isRunning = false;
+      alert("Time's up!");
+      return;
+    }
+    timeLeft--;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function pauseTimer() {
+  clearInterval(timer);
+  isRunning = false;
+}
+
+function resetTimer() {
+  clearInterval(timer);
+  timeLeft = 1500;
+  isRunning = false;
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  const minutes = Math.floor(timeLeft / 60);
+  const seconds = timeLeft % 60;
+  document.getElementById('timer-display').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// Initialize timer display
+updateTimerDisplay();
+
+// Search/Filter Tasks
+document.getElementById('search-input').addEventListener('input', function() {
+  const query = this.value.toLowerCase();
+  const tasks = document.querySelectorAll('#task-list li');
+  tasks.forEach(task => {
+    const text = task.textContent.toLowerCase();
+    task.style.display = text.includes(query) ? '' : 'none';
+  });
+});
+
+// Calendar Initialization
+document.addEventListener('DOMContentLoaded', function () {
+  var calendarEl = document.getElementById('calendar');
+  var calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth'
+  });
+  calendar.render();
+});
+
