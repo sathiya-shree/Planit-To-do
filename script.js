@@ -21,7 +21,10 @@ function renderTasks() {
     li.addEventListener("click", () => toggleTask(index));
     const delBtn = document.createElement("button");
     delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-    delBtn.onclick = () => deleteTask(index);
+    delBtn.onclick = (e) => {
+      e.stopPropagation(); // avoid toggling when deleting
+      deleteTask(index);
+    };
     li.appendChild(delBtn);
     taskList.appendChild(li);
   });
@@ -65,7 +68,10 @@ function filterTasks(type) {
       li.addEventListener("click", () => toggleTask(index));
       const delBtn = document.createElement("button");
       delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-      delBtn.onclick = () => deleteTask(index);
+      delBtn.onclick = (e) => {
+        e.stopPropagation();
+        deleteTask(index);
+      };
       li.appendChild(delBtn);
       taskList.appendChild(li);
     });
@@ -86,12 +92,13 @@ input.addEventListener("keydown", e => {
 renderTasks();
 
 // ==========================
-// Quote of the Day
+// Quote of the Day by Mood
 // ==========================
 
 async function fetchQuote() {
+  const mood = document.getElementById("mood-select")?.value || "inspirational";
   try {
-    const res = await fetch("https://api.quotable.io/random");
+    const res = await fetch(`https://api.quotable.io/random?tags=${mood}`);
     const data = await res.json();
     document.getElementById("quote-text").textContent = `"${data.content}"`;
     document.getElementById("quote-author").textContent = `— ${data.author}`;
@@ -100,7 +107,10 @@ async function fetchQuote() {
     document.getElementById("quote-author").textContent = "";
   }
 }
-fetchQuote();
+
+window.addEventListener("DOMContentLoaded", () => {
+  fetchQuote();
+});
 
 // ==========================
 // Productivity Tracker
@@ -117,7 +127,7 @@ function updateProductivity() {
 }
 
 // ==========================
-// Theme Toggle (optional)
+// Theme Toggle
 // ==========================
 
 function toggleTheme() {
