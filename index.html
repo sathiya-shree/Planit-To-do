@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Planit - To Do</title>
-  
+
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
@@ -25,6 +25,16 @@
 
     <!-- Quote of the Day -->
     <div id="quote-container" class="quote">
+      <label for="mood-select">Choose Mood:</label>
+      <select id="mood-select">
+        <option value="inspirational">Inspirational</option>
+        <option value="life">Life</option>
+        <option value="happiness">Happiness</option>
+        <option value="wisdom">Wisdom</option>
+        <option value="love">Love</option>
+        <option value="success">Success</option>
+      </select>
+      <button onclick="fetchQuote()">🔁 New Quote</button>
       <p id="quote-text">Loading inspirational quote...</p>
       <p id="quote-author"></p>
     </div>
@@ -52,7 +62,7 @@
     </div>
   </div>
 
-  <!-- PWA Service Worker -->
+  <!-- PWA Support -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
