@@ -105,14 +105,10 @@ ul#task-list {
 }
 
 #calendar {
-  margin-top: 30px;
-  text-align: center;
+  max-width: 800px;
+  margin: 20px auto;
+  background-color: var(--card);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
 }
 
-#calendar input {
-  padding: 10px;
-  background: #161b22;
-  border: none;
-  border-radius: 5px;
-  color: white;
-}
