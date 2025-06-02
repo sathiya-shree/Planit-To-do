@@ -1,23 +1,22 @@
-/* Reset and base styles */
-body, html {
+/* Reset + Basics */
+body {
   margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #1a1a1a;
-  color: white;
-  overflow-x: hidden;
+  background-color: #111;
+  color: #fff;
 }
 
-/* Starfield banner container */
+/* 🌌 Starfield Banner */
 .starfield-container {
   position: relative;
-  height: 300px;
+  height: 100vh;
   overflow: hidden;
 }
 
 #starfield {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
@@ -27,157 +26,97 @@ body, html {
   position: relative;
   z-index: 1;
   text-align: left;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 70px 20px 0 20px;
+  padding: 100px 50px;
+  max-width: 600px;
 }
 
 .starfield-overlay h1 {
-  font-size: 2em;
-  font-weight: 700;
-  margin-bottom: 10px;
+  font-size: 2.5em;
+  font-weight: bold;
 }
 
 .starfield-overlay p {
-  font-size: 1em;
-  margin-bottom: 15px;
+  font-size: 1.2em;
+  margin: 20px 0;
 }
 
 .start-btn {
-  padding: 10px 20px;
-  background: #00eaff;
+  background-color: #00f0ff;
+  color: #111;
   border: none;
-  color: #000;
+  padding: 10px 20px;
   font-weight: bold;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background 0.3s;
 }
 
-.start-btn:hover {
-  background: #00c7d4;
-}
-
-/* Main content area */
+/* 📋 Main Content */
 .main-content {
+  background-color: #222;
+  padding: 40px 20px;
   display: flex;
   justify-content: center;
-  padding: 40px 20px;
 }
 
-/* To-Do App box */
 .todo-app {
-  background: #2b2b2b;
+  background-color: #333;
   padding: 30px;
   border-radius: 12px;
-  width: 400px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-.todo-app h2 {
-  color: #00eaff;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
-blockquote {
-  font-style: italic;
-  font-size: 0.95em;
-  color: #ccc;
-  margin-bottom: 25px;
+  width: 100%;
+  max-width: 500px;
 }
 
 .input-row {
   display: flex;
-  gap: 5px;
+  gap: 10px;
   margin-bottom: 15px;
 }
 
-input, select, button {
-  border: none;
+input, select, button, textarea {
   padding: 10px;
-  border-radius: 6px;
+  border: none;
+  border-radius: 5px;
   font-size: 1em;
 }
 
-#task-input {
+input, select {
   flex: 1;
 }
 
-#add-btn {
-  background-color: #00eaff;
-  color: black;
-  font-weight: bold;
+button {
+  background-color: #00f0ff;
+  color: #000;
   cursor: pointer;
-}
-
-#add-btn:hover {
-  background-color: #00c7d4;
 }
 
 ul#task-list {
   list-style: none;
-  padding-left: 0;
-  margin-top: 10px;
+  padding: 0;
+  margin-top: 20px;
 }
 
 ul#task-list li {
-  background: #3a3a3a;
   padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 8px;
+  background: #444;
+  margin-bottom: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
 }
 
 ul#task-list li.completed {
   text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.task-category {
-  font-weight: bold;
-  margin-right: 8px;
-  color: #00eaff;
-}
-
-ul#task-list li button {
-  background: none;
-  border: none;
-  color: #ff4d4d;
-  font-size: 1.2em;
-  cursor: pointer;
+  color: #999;
 }
 
 .filter-buttons {
   display: flex;
-  justify-content: space-between;
-  margin: 15px 0;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-.filter-buttons button {
-  flex: 1;
-  margin: 0 4px;
-  background: #00eaff;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 6px;
-  padding: 8px 0;
-}
-
-.filter-buttons button:hover {
-  background: #00c7d4;
-}
-
-/* Journal */
-#daily-journal {
+textarea {
   width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  margin-top: 8px;
-  font-family: inherit;
-  resize: vertical;
+  margin-top: 10px;
+  resize: none;
 }
