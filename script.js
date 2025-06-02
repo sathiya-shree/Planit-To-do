@@ -1,111 +1,87 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-const taskList = document.getElementById("task-list");
-const input = document.getElementById("task-input");
-const addBtn = document.getElementById("add-btn");
+// Simple task list with categories
+const taskInput = document.getElementById("task-input");
 const categorySelect = document.getElementById("category-select");
-const journal = document.getElementById("daily-journal");
-const onboardingModal = document.getElementById("onboarding-modal");
+const addBtn = document.getElementById("add-btn");
+const taskList = document.getElementById("task-list");
 const closeModalBtn = document.getElementById("close-modal");
+const onboardingModal = document.getElementById("onboarding-modal");
 
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+addBtn.addEventListener("click", addTask);
+taskInput.addEventListener("keydown", e => {
+  if (e.key === "Enter") addTask();
+});
+
+closeModalBtn.addEventListener("click", () => {
+  onboardingModal.style.display = "none";
+});
+
+// Task array and filter state
+let tasks = [];
+let filter = "all";
+
+function addTask() {
+  const taskText = taskInput.value.trim();
+  const category = categorySelect.value;
+
+  if (taskText === "") return;
+
+  const newTask = {
+    id: Date.now(),
+    text: taskText,
+    category,
+    completed: false
+  };
+
+  tasks.push(newTask);
+  taskInput.value = "";
+  renderTasks();
 }
 
-function getToday() {
-  return new Date().toISOString().split("T")[0];
-}
-
-function renderTasks(filter = "all") {
+function renderTasks() {
   taskList.innerHTML = "";
   let filteredTasks = tasks;
 
-  if (filter === "active") filteredTasks = tasks.filter(t => !t.completed);
-  else if (filter === "completed") filteredTasks = tasks.filter(t => t.completed);
+  if (filter === "active") {
+    filteredTasks = tasks.filter(t => !t.completed);
+  } else if (filter === "completed") {
+    filteredTasks = tasks.filter(t => t.completed);
+  }
 
-  filteredTasks.forEach((task, index) => {
+  filteredTasks.forEach(task => {
     const li = document.createElement("li");
-    li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
-    if (task.completed) li.classList.add("completed");
+    li.className = task.completed ? "completed" : "";
+    li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text} 
+                    <button title="Delete task">&times;</button>`;
 
-    li.addEventListener("click", () => toggleTask(index));
-
-    const delBtn = document.createElement("button");
-    delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-    delBtn.onclick = (e) => {
+    li.querySelector("button").addEventListener("click", e => {
       e.stopPropagation();
-      deleteTask(index);
-    };
-    li.appendChild(delBtn);
+      tasks = tasks.filter(t => t.id !== task.id);
+      renderTasks();
+    });
+
+    li.addEventListener("click", () => {
+      task.completed = !task.completed;
+      renderTasks();
+    });
+
     taskList.appendChild(li);
   });
 }
 
-function addTask() {
-  const text = input.value.trim();
-  const category = categorySelect.value;
-  if (!text) return;
-  tasks.push({ text, category, completed: false, date: getToday() });
-  saveTasks();
+function filterTasks(type) {
+  filter = type;
   renderTasks();
-  input.value = "";
-}
-
-function toggleTask(index) {
-  tasks[index].completed = !tasks[index].completed;
-  tasks[index].date = getToday();
-  saveTasks();
-  renderTasks();
-}
-
-function deleteTask(index) {
-  tasks.splice(index, 1);
-  saveTasks();
-  renderTasks();
-}
-
-function filterTasks(filter) {
-  renderTasks(filter);
 }
 
 function clearCompleted() {
-  tasks = tasks.filter(task => !task.completed);
-  saveTasks();
+  tasks = tasks.filter(t => !t.completed);
   renderTasks();
 }
 
+// Theme toggle (dark/light)
 function toggleTheme() {
   document.body.classList.toggle("dark-theme");
-  // Optional: Save theme preference
 }
 
-// Journal save/load
-function setupJournal() {
-  journal.value = localStorage.getItem("journal") || "";
-  journal.addEventListener("input", () => {
-    localStorage.setItem("journal", journal.value);
-  });
-}
-
-// Onboarding Modal
-function setupModal() {
-  const shownBefore = localStorage.getItem("onboardingShown");
-  if (!shownBefore) {
-    onboardingModal.style.display = "flex";
-  }
-
-  closeModalBtn.addEventListener("click", () => {
-    onboardingModal.style.display = "none";
-    localStorage.setItem("onboardingShown", "true");
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  addBtn.addEventListener("click", addTask);
-  input.addEventListener("keydown", e => {
-    if (e.key === "Enter") addTask();
-  });
-
-  setupJournal();
-  setupModal();
-  renderTasks();
-});
+// Initialize with sample tasks if needed
+renderTasks();
