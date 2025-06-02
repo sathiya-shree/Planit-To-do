@@ -1,161 +1,27 @@
-:root {
-  --bg: #0d0d0d;
-  --text: #f4f4f4;
-  --card: rgba(255, 255, 255, 0.05);
-}
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
-  overflow-x: hidden;
-}
-
-#bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
-  background: black;
-}
-
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background-color: var(--card);
-  box-shadow: 0 0 10px rgba(255,255,255,0.1);
-  border-radius: 10px;
-}
-
-h1 {
+/* Pomodoro Timer Styles */
+.pomodoro-timer {
+  margin-top: 20px;
   text-align: center;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  cursor: pointer;
+#timer-display {
+  font-size: 2em;
+  margin: 10px 0;
 }
 
-.input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+.timer-controls button {
+  margin: 0 5px;
+  padding: 10px 20px;
 }
 
-.input-group input, .input-group select {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.input-group button {
-  padding: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-ul#task-list {
-  list-style: none;
-  padding: 0;
-}
-
-ul#task-list li {
-  padding: 10px;
-  border-bottom: 1px solid #555;
-  position: relative;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-ul#task-list li:hover {
-  background-color: rgba(255,255,255,0.1);
-}
-
-ul#task-list li.completed {
-  text-decoration: line-through;
-  color: #aaa;
-  background-color: #224422;
-  animation: completeTask 0.5s ease-out;
-}
-
-ul#task-list li button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  background: none;
-  border: none;
-  color: #f66;
-  cursor: pointer;
-}
-
-.footer {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.footer button {
-  padding: 10px;
-  cursor: pointer;
-}
-
-.quote {
+/* Search Group Styles */
+.search-group {
+  margin: 20px 0;
   text-align: center;
-  margin-bottom: 20px;
-  font-style: italic;
 }
 
-.journal-section {
-  margin-top: 30px;
-}
-
-#daily-journal {
-  width: 100%;
-  height: 250px;
-  padding: 15px;
-  font-size: 16px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 6px;
-  color: white;
-}
-
-#calendar {
-  margin-top: 20px;
-}
-
-/* Modal */
-.modal {
-  display: block;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.7);
-}
-
-.modal-content {
-  background-color: #222;
-  color: white;
-  margin: 15% auto;
-  padding: 20px;
-  border-radius: 10px;
+.search-group input {
   width: 80%;
-  max-width: 400px;
-  text-align: center;
-}
-
-/* Animation */
-@keyframes completeTask {
-  0% { background-color: transparent; }
-  100% { background-color: #224422; }
+  padding: 10px;
+  font-size: 1em;
 }
