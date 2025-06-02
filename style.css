@@ -1,115 +1,63 @@
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  color: #fff;
-  background: #0d1117;
-  height: 100%;
-  overflow-x: hidden;
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let stars = [];
+const numStars = 150;
+
+function randomRange(min, max) {
+  return Math.random() * (max - min) + min;
 }
 
-#bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+function Star() {
+  this.x = Math.random() * window.innerWidth;
+  this.y = Math.random() * window.innerHeight;
+  this.size = randomRange(0.5, 1.5);
+  this.speed = randomRange(0.1, 0.5);
+  this.opacity = randomRange(0.1, 0.9);
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  z-index: 2;
-  position: relative;
+Star.prototype.update = function() {
+  this.x += this.speed;
+  if (this.x > window.innerWidth) {
+    this.x = 0;
+    this.y = Math.random() * window.innerHeight;
+  }
+};
+
+Star.prototype.draw = function() {
+  ctx.beginPath();
+  ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+  ctx.shadowColor = 'white';
+  ctx.shadowBlur = 5;
+  ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+  ctx.fill();
+};
+
+function initStars() {
+  stars = [];
+  for (let i = 0; i < numStars; i++) {
+    stars.push(new Star());
+  }
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(star => {
+    star.update();
+    star.draw();
+  });
+  requestAnimationFrame(animate);
 }
 
-.input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 
-.input-group input, .input-group select {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-}
+window.addEventListener('resize', () => {
+  resize();
+  initStars();
+});
 
-.input-group button {
-  padding: 10px;
-  background: #58a6ff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  font-size: 20px;
-}
-
-ul#task-list {
-  list-style: none;
-  padding: 0;
-  margin-bottom: 20px;
-}
-
-#task-list li {
-  background: #161b22;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-
-#task-list li.completed {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.task-category {
-  font-weight: bold;
-  color: #58a6ff;
-}
-
-#task-list button {
-  background: transparent;
-  border: none;
-  color: #c9d1d9;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.journal-section textarea {
-  width: 100%;
-  height: 150px;
-  padding: 10px;
-  background: #161b22;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  resize: vertical;
-  margin-bottom: 20px;
-}
-
-.quote {
-  text-align: center;
-  margin-top: 30px;
-  font-style: italic;
-}
-#calendar {
-  max-width: 800px;
-  margin: 20px auto;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  padding: 10px;
-  height: 400px;
-}
-
+resize();
+initStars();
+animate();
