@@ -9,46 +9,47 @@
 </head>
 <body>
 
-  <!-- ⭐ STARFIELD TOP BANNER -->
+  <!-- ⭐ Starfield Banner -->
   <div class="starfield-container">
     <canvas id="starfield"></canvas>
     <div class="starfield-overlay">
-      <h1>PlanIt 🌌</h1>
-      <p>Organize your goals, dreams, and tasks. Reach for the stars ✨</p>
-      <button class="start-btn" onclick="document.getElementById('main-content').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      <h1>Welcome to PlanIt!</h1>
+      <p>Organize your tasks efficiently with categories, track your progress, and more.</p>
+      <button class="start-btn" onclick="document.getElementById('main-content').scrollIntoView({behavior: 'smooth'})">Get Started</button>
     </div>
   </div>
 
-  <!-- 📋 TASK AND JOURNAL SECTION -->
+  <!-- 📋 Main Content -->
   <div id="main-content" class="main-content">
     <div class="todo-app">
-      <h2>Today's Plan</h2>
-      <blockquote>“The future depends on what you do today.” – Mahatma Gandhi</blockquote>
+      <h2>PlanIt - To Do</h2>
+      <blockquote>"In the middle of every difficulty lies opportunity."<br>— Albert Einstein</blockquote>
 
       <div class="input-row">
-        <input type="text" id="task-input" placeholder="Add your task..." />
+        <input type="text" id="task-input" placeholder="Add a new task..." />
         <select id="category-select">
-          <option value="Personal">Personal</option>
-          <option value="Work">Work</option>
           <option value="Study">Study</option>
+          <option value="Work">Work</option>
+          <option value="Personal">Personal</option>
         </select>
-        <button id="add-btn">Add</button>
+        <button id="add-btn"><i class="fas fa-plus"></i></button>
       </div>
+
+      <ul id="task-list"></ul>
 
       <div class="filter-buttons">
         <button onclick="renderTasks()">All</button>
         <button onclick="filterTasks('active')">Active</button>
         <button onclick="filterTasks('completed')">Completed</button>
-        <button onclick="clearCompleted()">Clear Done</button>
+        <button onclick="clearCompleted()">Clear Completed</button>
       </div>
 
-      <ul id="task-list"></ul>
-
-      <h3>📝 Daily Journal</h3>
-      <textarea id="daily-journal" rows="5" placeholder="Reflect on your day..."></textarea>
+      <h3>Daily Journal</h3>
+      <textarea id="daily-journal" rows="4" placeholder="Write about your day..."></textarea>
     </div>
   </div>
 
+  <script src="starfield.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
