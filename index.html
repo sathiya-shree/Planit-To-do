@@ -28,16 +28,11 @@
 
     <!-- Quote -->
     <div id="quote-container" class="quote">
-      <p id="quote-text">Loading inspirational quote...</p>
-      <p id="quote-author"></p>
+      <p id="quote-text">"In the middle of every difficulty lies opportunity."</p>
+      <p id="quote-author">— Albert Einstein</p>
     </div>
 
-    <!-- Productivity Tracker -->
-    <div id="productivity-container" class="productivity">
-      <p>Tasks completed today: <span id="tasks-today">0</span></p>
-    </div>
-
-    <!-- Task Input -->
+    <!-- Add Task -->
     <div class="input-group">
       <input type="text" id="task-input" placeholder="Add a new task..." />
       <select id="category-select">
@@ -49,10 +44,8 @@
       <button id="add-btn"><i class="fas fa-plus"></i></button>
     </div>
 
-    <!-- Task List -->
     <ul id="task-list"></ul>
 
-    <!-- Footer Filters -->
     <div class="footer">
       <button onclick="filterTasks('all')">All</button>
       <button onclick="filterTasks('active')">Active</button>
@@ -60,7 +53,7 @@
       <button onclick="clearCompleted()">Clear Completed</button>
     </div>
 
-    <!-- Journal -->
+    <!-- Daily Journal -->
     <div class="journal-section">
       <h2>Daily Journal</h2>
       <textarea id="daily-journal" placeholder="Write your thoughts here..."></textarea>
