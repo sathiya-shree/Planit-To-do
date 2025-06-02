@@ -4,19 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Planit - To Do</title>
+  
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
-   <script src="starfield.js"></script>
-  <script defer src="script.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
+  <!-- Scripts -->
+  <script defer src="script.js"></script>
+  <script defer src="starfield.js"></script>
 </head>
 <body>
+  <!-- Starfield Canvas -->
   <canvas id="bg"></canvas>
 
   <div class="container">
-    <h1>Planit - To Do</h1>
+    <h1>🌍 Planit - To Do</h1>
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
     <!-- Quote of the Day -->
@@ -30,13 +34,16 @@
       <p>Tasks completed today: <span id="tasks-today">0</span></p>
     </div>
 
+    <!-- Task Input -->
     <div class="input-group">
       <input type="text" id="task-input" placeholder="Add a new task..." />
       <button id="add-btn"><i class="fas fa-plus"></i></button>
     </div>
 
+    <!-- Task List -->
     <ul id="task-list"></ul>
 
+    <!-- Footer Controls -->
     <div class="footer">
       <button onclick="filterTasks('all')">All</button>
       <button onclick="filterTasks('active')">Active</button>
@@ -45,6 +52,7 @@
     </div>
   </div>
 
+  <!-- PWA Service Worker -->
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
