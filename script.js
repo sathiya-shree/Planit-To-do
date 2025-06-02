@@ -1,7 +1,3 @@
-// ==========================
-// Task Management
-// ==========================
-
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const taskList = document.getElementById("task-list");
 const input = document.getElementById("task-input");
@@ -20,20 +16,17 @@ function renderTasks() {
     if (task.completed) li.classList.add("completed");
 
     li.addEventListener("click", () => toggleTask(index));
-
     const delBtn = document.createElement("button");
     delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
     delBtn.onclick = (e) => {
       e.stopPropagation();
       deleteTask(index);
     };
-
     li.appendChild(delBtn);
     taskList.appendChild(li);
   });
 
   updateProductivity();
-  updateCalendar();
 }
 
 function addTask() {
@@ -60,25 +53,27 @@ function deleteTask(index) {
 }
 
 function filterTasks(type) {
-  let filtered = tasks;
-  if (type === "active") filtered = tasks.filter(t => !t.completed);
-  else if (type === "completed") filtered = tasks.filter(t => t.completed);
-
-  taskList.innerHTML = "";
-  filtered.forEach((task, index) => {
-    const li = document.createElement("li");
-    li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
-    if (task.completed) li.classList.add("completed");
-    li.addEventListener("click", () => toggleTask(index));
-    const delBtn = document.createElement("button");
-    delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-    delBtn.onclick = (e) => {
-      e.stopPropagation();
-      deleteTask(index);
-    };
-    li.appendChild(delBtn);
-    taskList.appendChild(li);
-  });
+  if (type === "all") renderTasks();
+  else {
+    const filtered = tasks.filter(t =>
+      type === "active" ? !t.completed : t.completed
+    );
+    taskList.innerHTML = "";
+    filtered.forEach((task, index) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
+      if (task.completed) li.classList.add("completed");
+      li.addEventListener("click", () => toggleTask(index));
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+      delBtn.onclick = (e) => {
+        e.stopPropagation();
+        deleteTask(index);
+      };
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+    });
+  }
 }
 
 function clearCompleted() {
@@ -94,9 +89,9 @@ input.addEventListener("keydown", e => {
 
 renderTasks();
 
-// ==========================
+// =====================
 // Quote of the Day
-// ==========================
+// =====================
 
 async function fetchQuote() {
   try {
@@ -105,128 +100,49 @@ async function fetchQuote() {
     document.getElementById("quote-text").textContent = `"${data.content}"`;
     document.getElementById("quote-author").textContent = `— ${data.author}`;
   } catch {
-    document.getElementById("quote-text").textContent = "Stay positive and keep planning!";
-    document.getElementById("quote-author").textContent = "";
+    // Hardcoded backup quote
+    document.getElementById("quote-text").textContent = `"Success is not final, failure is not fatal: It is the courage to continue that counts."`;
+    document.getElementById("quote-author").textContent = "— Winston Churchill";
   }
 }
 fetchQuote();
 
-// ==========================
+// =====================
 // Productivity Tracker
-// ==========================
+// =====================
 
 function getToday() {
-  return new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  return new Date().toISOString().split("T")[0];
 }
 
 function updateProductivity() {
   const today = getToday();
-  const completedToday = tasks.filter(t => t.completed && t.date === today);
-  document.getElementById("tasks-today").textContent = completedToday.length;
+  const todayTasks = tasks.filter(t => t.completed && t.date === today);
+  document.getElementById("tasks-today").textContent = todayTasks.length;
 }
 
-// ==========================
-// Onboarding Modal
-// ==========================
-
-const modal = document.getElementById("onboarding-modal");
-const closeModal = document.getElementById("close-modal");
-
-if (!localStorage.getItem("onboardingDone")) {
-  modal.style.display = "block";
-}
-
-closeModal.addEventListener("click", () => {
-  modal.style.display = "none";
-  localStorage.setItem("onboardingDone", "true");
-});
-
-// ==========================
-// Daily Journal Save
-// ==========================
+// =====================
+// Journal Storage
+// =====================
 
 const journal = document.getElementById("daily-journal");
-const savedJournal = localStorage.getItem("dailyJournal");
-
-if (savedJournal) journal.value = savedJournal;
+journal.value = localStorage.getItem("dailyJournal") || "";
 
 journal.addEventListener("input", () => {
   localStorage.setItem("dailyJournal", journal.value);
 });
 
-// ==========================
-// Calendar Integration
-// ==========================
+// =====================
+// Modal Behavior
+// =====================
 
-document.addEventListener("DOMContentLoaded", function () {
-  const calendarEl = document.getElementById("calendar");
-  const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: "dayGridMonth",
-    events: tasks
-      .filter(task => task.completed)
-      .map(task => ({
-        title: task.text,
-        date: task.date
-      }))
-  });
-  calendar.render();
-});
-
-function updateCalendar() {
-  const calendarEl = document.getElementById("calendar");
-  if (calendarEl && FullCalendar) {
-    const calendar = FullCalendar.getCalendar(calendarEl);
-    if (calendar) {
-      calendar.removeAllEvents();
-      tasks
-        .filter(task => task.completed)
-        .forEach(task => {
-          calendar.addEvent({
-            title: task.text,
-            date: task.date
-          });
-        });
-    }
-  }
+const modal = document.getElementById("onboarding-modal");
+const closeBtn = document.getElementById("close-modal");
+if (!localStorage.getItem("seenOnboarding")) {
+  modal.style.display = "block";
 }
 
-// ==========================
-// Starfield Background
-// ==========================
-
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let stars = [];
-for (let i = 0; i < 150; i++) {
-  stars.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    radius: Math.random() * 1.5,
-    dx: (Math.random() - 0.5) * 0.5,
-    dy: (Math.random() - 0.5) * 0.5
-  });
-}
-
-function animateStars() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#fff";
-  stars.forEach(star => {
-    ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-    ctx.fill();
-    star.x += star.dx;
-    star.y += star.dy;
-    if (star.x < 0 || star.x > canvas.width) star.dx *= -1;
-    if (star.y < 0 || star.y > canvas.height) star.dy *= -1;
-  });
-  requestAnimationFrame(animateStars);
-}
-animateStars();
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+  localStorage.setItem("seenOnboarding", "true");
 });
