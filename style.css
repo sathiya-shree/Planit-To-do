@@ -103,12 +103,13 @@ ul#task-list {
   margin-top: 30px;
   font-style: italic;
 }
-
 #calendar {
   max-width: 800px;
   margin: 20px auto;
-  background-color: var(--card);
+  background: white;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
+  padding: 10px;
+  height: 400px;
 }
 
