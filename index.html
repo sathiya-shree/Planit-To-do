@@ -2,36 +2,54 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Planit - To Do</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
-  <script defer src="script.js"></script>
-  <script defer src="orbit.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script defer src="orbit.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
   <canvas id="bg"></canvas>
-  <div class="container">
+  <div class="container" role="main">
     <h1>🌍 Planit - To Do</h1>
-    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+    <button
+      class="theme-toggle"
+      aria-label="Toggle theme"
+      onclick="toggleTheme()"
+      title="Toggle Light/Dark Theme"
+    >
+      🌓
+    </button>
     <div class="input-group">
-      <input type="text" id="task-input" placeholder="Add a new task..." />
-      <button id="add-btn"><i class="fas fa-plus"></i></button>
+      <input
+        type="text"
+        id="task-input"
+        placeholder="Add a new task..."
+        aria-label="Task input"
+      />
+      <button id="add-btn" aria-label="Add task">
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
-    <ul id="task-list"></ul>
-    <div class="footer">
-      <button onclick="filterTasks('all')">All</button>
-      <button onclick="filterTasks('active')">Active</button>
-      <button onclick="filterTasks('completed')">Completed</button>
+    <ul id="task-list" aria-live="polite" aria-label="Task list"></ul>
+    <div class="footer" role="region" aria-label="Task filters">
+      <button onclick="filterTasks('all')" aria-pressed="true">All</button>
+      <button onclick="filterTasks('active')" aria-pressed="false">Active</button>
+      <button onclick="filterTasks('completed')" aria-pressed="false">Completed</button>
       <button onclick="clearCompleted()">Clear Completed</button>
     </div>
   </div>
+
   <script>
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.register('service-worker.js').catch(console.error);
     }
   </script>
 </body>
