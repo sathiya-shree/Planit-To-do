@@ -1,34 +1,149 @@
-/* Quote */
-.quote {
-  background: rgba(0, 247, 255, 0.1);
-  border-left: 4px solid var(--accent);
-  padding: 10px 15px;
-  margin-bottom: 1rem;
-  font-style: italic;
-  color: var(--accent);
-  border-radius: 5px;
-  min-height: 60px;
+:root {
+  --bg: #f4f4f4;
+  --text: #1f1f1f;
+  --card: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background-color: var(--card);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.input-group {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-#quote-author {
-  margin-top: 5px;
-  font-weight: 600;
-  text-align: right;
-  font-size: 0.9rem;
-  opacity: 0.8;
+.input-group input, .input-group select {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
 }
 
-/* Productivity Tracker */
+.input-group button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+ul#task-list {
+  list-style: none;
+  padding: 0;
+}
+
+ul#task-list li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+ul#task-list li:hover {
+  background-color: #f0f0f0;
+}
+
+ul#task-list li.completed {
+  text-decoration: line-through;
+  color: #6c757d;
+  background-color: #d4edda;
+  animation: completeTask 0.5s ease-out;
+}
+
+ul#task-list li button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  border: none;
+  color: #dc3545;
+  cursor: pointer;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.footer button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.quote {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .productivity {
-  background: rgba(0, 247, 255, 0.05);
-  color: #fff;
-  border: 1px solid var(--accent);
-  border-radius: 6px;
-  padding: 8px 15px;
-  margin-bottom: 1rem;
-  font-weight: 600;
-  font-size: 0.95rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.journal-section {
+  margin-top: 20px;
+}
+
+#daily-journal {
+  width: 100%;
+  height: 150px;
+  padding: 10px;
+  font-size: 16px;
+  resize: vertical;
+}
+
+#calendar {
+  margin-top: 20px;
+}
+
+/* Onboarding Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+@keyframes completeTask {
+  0% { background-color: #fff; }
+  100% { background-color: #d4edda; }
 }
