@@ -22,6 +22,9 @@
     </div>
   </div>
 
+  <!-- Calendar placed below the "Get Started" button -->
+  <div id="calendar"></div>
+
   <div class="container">
     <h1>Planit - To Do</h1>
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
@@ -30,6 +33,22 @@
     <div id="quote-container" class="quote">
       <p id="quote-text">"In the middle of every difficulty lies opportunity."</p>
       <p id="quote-author">— Albert Einstein</p>
+    </div>
+
+    <!-- Pomodoro Timer -->
+    <div class="pomodoro-timer">
+      <h2>Pomodoro Timer</h2>
+      <div id="timer-display">25:00</div>
+      <div class="timer-controls">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
+      </div>
+    </div>
+
+    <!-- Search Tasks -->
+    <div class="search-group">
+      <input type="text" id="search-input" placeholder="Search tasks..." />
     </div>
 
     <!-- Add Task -->
@@ -58,13 +77,10 @@
       <h2>Daily Journal</h2>
       <textarea id="daily-journal" placeholder="Write your thoughts here..."></textarea>
     </div>
-
-    <!-- Calendar -->
-    <div id="calendar"></div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
   <script src="script.js"></script>
-  <script src="starfield.js"></script> 
+  <script src="starfield.js"></script>
 </body>
 </html>
