@@ -3,83 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Planit - To Do</title>
+  <title>Daily Task Manager</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
   <canvas id="bg"></canvas>
 
-  <!-- Onboarding Modal -->
-  <div id="onboarding-modal" class="modal">
-    <div class="modal-content">
-      <h2>Welcome to Planit!</h2>
-      <p>Organize your tasks efficiently with categories, track your progress, and more.</p>
-      <button id="close-modal">Get Started</button>
-    </div>
-  </div>
-
-  <!-- Calendar placed below the "Get Started" button -->
-  <div id="calendar"></div>
-
   <div class="container">
-    <h1>Planit - To Do</h1>
-    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+    <h1>Daily Task Manager</h1>
 
-    <!-- Quote -->
-    <div id="quote-container" class="quote">
-      <p id="quote-text">"In the middle of every difficulty lies opportunity."</p>
-      <p id="quote-author">— Albert Einstein</p>
-    </div>
-
-    <!-- Pomodoro Timer -->
-    <div class="pomodoro-timer">
-      <h2>Pomodoro Timer</h2>
-      <div id="timer-display">25:00</div>
-      <div class="timer-controls">
-        <button onclick="startTimer()">Start</button>
-        <button onclick="pauseTimer()">Pause</button>
-        <button onclick="resetTimer()">Reset</button>
-      </div>
-    </div>
-
-    <!-- Search Tasks -->
-    <div class="search-group">
-      <input type="text" id="search-input" placeholder="Search tasks..." />
-    </div>
-
-    <!-- Add Task -->
+    <!-- Input Area -->
     <div class="input-group">
-      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <input type="text" id="task-input" placeholder="Add new task..." />
       <select id="category-select">
         <option value="General">General</option>
         <option value="Work">Work</option>
         <option value="Personal">Personal</option>
         <option value="Study">Study</option>
       </select>
-      <button id="add-btn"><i class="fas fa-plus"></i></button>
+      <button id="add-btn">+</button>
     </div>
 
+    <!-- Task List -->
     <ul id="task-list"></ul>
 
-    <div class="footer">
-      <button onclick="filterTasks('all')">All</button>
-      <button onclick="filterTasks('active')">Active</button>
-      <button onclick="filterTasks('completed')">Completed</button>
-      <button onclick="clearCompleted()">Clear Completed</button>
+    <!-- Journal -->
+    <div class="journal-section">
+      <h3>Journal</h3>
+      <textarea id="journal" placeholder="Write your thoughts..."></textarea>
     </div>
 
-    <!-- Daily Journal -->
-    <div class="journal-section">
-      <h2>Daily Journal</h2>
-      <textarea id="daily-journal" placeholder="Write your thoughts here..."></textarea>
+    <!-- Quote -->
+    <div class="quote">
+      <p id="quote-text">"In the middle of every difficulty lies opportunity."</p>
+      <p id="quote-author">— Albert Einstein</p>
+    </div>
+
+    <!-- Calendar -->
+    <div id="calendar">
+      <h3>Calendar</h3>
+      <input type="date" id="calendar-picker" />
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
   <script src="script.js"></script>
   <script src="starfield.js"></script>
 </body>
