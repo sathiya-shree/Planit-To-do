@@ -2,47 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Planit - To-Do App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Planit - To Do</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
+  <script defer src="script.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="light-mode">
-
-  <div class="theme-toggle">
-    <label for="toggle-theme">🌙 Dark Mode</label>
-    <input type="checkbox" id="toggle-theme" />
-  </div>
-
-  <canvas id="bgCanvas"></canvas>
-
+<body>
   <div class="container">
-    <h1 class="planit-title">🚀 Planit</h1>
-
-    <div class="project-bar">
-      <input type="text" id="projectInput" placeholder="New Project Name" />
-      <button id="addProjectBtn">Add Project</button>
-      <select id="projectSelect" aria-label="Select Project"></select>
+    <h1>🌍 Planit - To Do</h1>
+    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+    <div class="input-group">
+      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <button id="add-btn"><i class="fas fa-plus"></i></button>
     </div>
-
-    <div class="task-bar">
-      <input type="text" id="taskInput" placeholder="New Task Name" />
-      <select id="tagSelect" aria-label="Select Tag">
-        <option value="Work">Work</option>
-        <option value="Urgent">Urgent</option>
-        <option value="Personal">Personal</option>
-        <option value="Low">Low</option>
-      </select>
-      <input type="date" id="dueDateInput" />
-      <button id="addTaskBtn" aria-label="Add Task">+</button>
+    <ul id="task-list"></ul>
+    <div class="footer">
+      <button onclick="filterTasks('all')">All</button>
+      <button onclick="filterTasks('active')">Active</button>
+      <button onclick="filterTasks('completed')">Completed</button>
+      <button onclick="clearCompleted()">Clear Completed</button>
     </div>
-
-    <input type="text" id="searchInput" placeholder="Search tasks..." aria-label="Search tasks" />
-
-    <ul id="taskList" aria-live="polite"></ul>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>
-s
