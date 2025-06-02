@@ -3,6 +3,9 @@ const taskList = document.getElementById("task-list");
 const input = document.getElementById("task-input");
 const addBtn = document.getElementById("add-btn");
 const categorySelect = document.getElementById("category-select");
+const journal = document.getElementById("daily-journal");
+const onboardingModal = document.getElementById("onboarding-modal");
+const closeModalBtn = document.getElementById("close-modal");
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -12,9 +15,14 @@ function getToday() {
   return new Date().toISOString().split("T")[0];
 }
 
-function renderTasks() {
+function renderTasks(filter = "all") {
   taskList.innerHTML = "";
-  tasks.forEach((task, index) => {
+  let filteredTasks = tasks;
+
+  if (filter === "active") filteredTasks = tasks.filter(t => !t.completed);
+  else if (filter === "completed") filteredTasks = tasks.filter(t => t.completed);
+
+  filteredTasks.forEach((task, index) => {
     const li = document.createElement("li");
     li.innerHTML = `<span class="task-category">[${task.category}]</span> ${task.text}`;
     if (task.completed) li.classList.add("completed");
@@ -55,27 +63,49 @@ function deleteTask(index) {
   renderTasks();
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-  // Initialize Calendar
-  var calendarEl = document.getElementById('calendar');
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    height: 400,
-  });
-  calendar.render();
+function filterTasks(filter) {
+  renderTasks(filter);
+}
 
-  // Journal Save
-  const journal = document.getElementById("daily-journal");
+function clearCompleted() {
+  tasks = tasks.filter(task => !task.completed);
+  saveTasks();
+  renderTasks();
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark-theme");
+  // Optional: Save theme preference
+}
+
+// Journal save/load
+function setupJournal() {
   journal.value = localStorage.getItem("journal") || "";
   journal.addEventListener("input", () => {
     localStorage.setItem("journal", journal.value);
   });
+}
 
-  // Init tasks
+// Onboarding Modal
+function setupModal() {
+  const shownBefore = localStorage.getItem("onboardingShown");
+  if (!shownBefore) {
+    onboardingModal.style.display = "flex";
+  }
+
+  closeModalBtn.addEventListener("click", () => {
+    onboardingModal.style.display = "none";
+    localStorage.setItem("onboardingShown", "true");
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
   addBtn.addEventListener("click", addTask);
   input.addEventListener("keydown", e => {
     if (e.key === "Enter") addTask();
   });
 
+  setupJournal();
+  setupModal();
   renderTasks();
 });
