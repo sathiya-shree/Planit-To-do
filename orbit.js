@@ -8,44 +8,47 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 
-// Star object constructor
-function Star() {
-  this.x = Math.random() * canvas.width;
-  this.y = Math.random() * canvas.height;
-  this.radius = Math.random() * 1.5 + 0.5;
-  this.opacity = Math.random();
-  this.opacityDirection = Math.random() > 0.5 ? 1 : -1;
-  this.speed = Math.random() * 0.3 + 0.1;
-}
+const centerX = () => canvas.width / 2;
+const centerY = () => canvas.height / 2;
 
-const stars = Array.from({ length: 150 }, () => new Star());
+class OrbitingStar {
+  constructor(radius, speed, size, color) {
+    this.orbitRadius = radius;
+    this.angle = Math.random() * Math.PI * 2;
+    this.speed = speed;
+    this.size = size;
+    this.color = color;
+  }
 
-function drawStars() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  stars.forEach((star) => {
-    // Twinkle by changing opacity
-    star.opacity += star.opacityDirection * 0.01;
-    if (star.opacity <= 0 || star.opacity >= 1) {
-      star.opacityDirection *= -1;
-    }
-
-    // Slow drifting
-    star.y += star.speed;
-    if (star.y > canvas.height) {
-      star.y = 0;
-      star.x = Math.random() * canvas.width;
-    }
+  update() {
+    this.angle += this.speed;
+    const x = centerX() + this.orbitRadius * Math.cos(this.angle);
+    const y = centerY() + this.orbitRadius * Math.sin(this.angle);
 
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
-    ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
-    ctx.shadowColor = "#00f7ff";
-    ctx.shadowBlur = 5;
+    ctx.arc(x, y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.shadowColor = this.color;
+    ctx.shadowBlur = 8;
     ctx.fill();
-  });
-
-  requestAnimationFrame(drawStars);
+  }
 }
 
-drawStars();
+const orbitingStars = [
+  new OrbitingStar(40, 0.015, 2, "#ffffff"),
+  new OrbitingStar(80, 0.01, 2.5, "#80dfff"),
+  new OrbitingStar(120, 0.007, 3, "#66ccff"),
+  new OrbitingStar(160, 0.005, 2, "#00f7ff"),
+  new OrbitingStar(200, 0.003, 2.5, "#aadfff")
+];
+
+function animate() {
+  ctx.fillStyle = "rgba(0, 0, 20, 0.2)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  orbitingStars.forEach(star => star.update());
+
+  requestAnimationFrame(animate);
+}
+
+animate();
