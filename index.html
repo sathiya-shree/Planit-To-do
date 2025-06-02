@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,8 +7,6 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
-  <script defer src="script.js"></script>
-  <script src="starfield.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
 </head>
@@ -29,7 +26,7 @@
     <h1>Planit - To Do</h1>
     <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
 
-    <!-- Quote of the Day -->
+    <!-- Quote -->
     <div id="quote-container" class="quote">
       <p id="quote-text">Loading inspirational quote...</p>
       <p id="quote-author"></p>
@@ -40,6 +37,7 @@
       <p>Tasks completed today: <span id="tasks-today">0</span></p>
     </div>
 
+    <!-- Task Input -->
     <div class="input-group">
       <input type="text" id="task-input" placeholder="Add a new task..." />
       <select id="category-select">
@@ -51,8 +49,10 @@
       <button id="add-btn"><i class="fas fa-plus"></i></button>
     </div>
 
+    <!-- Task List -->
     <ul id="task-list"></ul>
 
+    <!-- Footer Filters -->
     <div class="footer">
       <button onclick="filterTasks('all')">All</button>
       <button onclick="filterTasks('active')">Active</button>
@@ -60,13 +60,13 @@
       <button onclick="clearCompleted()">Clear Completed</button>
     </div>
 
-    <!-- Daily Journal -->
+    <!-- Journal -->
     <div class="journal-section">
       <h2>Daily Journal</h2>
       <textarea id="daily-journal" placeholder="Write your thoughts here..."></textarea>
     </div>
 
-    <!-- Calendar View -->
+    <!-- Calendar -->
     <div id="calendar"></div>
   </div>
 
