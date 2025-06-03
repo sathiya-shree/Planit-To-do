@@ -1,7 +1,9 @@
+
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 const taskList = document.getElementById("task-list");
 const input = document.getElementById("task-input");
 const addBtn = document.getElementById("add-btn");
+const tagSelect = document.getElementById("tag-select");
 
 function saveTasks() {
   localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -11,8 +13,9 @@ function renderTasks() {
   taskList.innerHTML = "";
   tasks.forEach((task, index) => {
     const li = document.createElement("li");
-    li.textContent = task.text;
+    li.textContent = `${task.text} [${task.tag}]`;
     if (task.completed) li.classList.add("completed");
+
     li.addEventListener("click", () => toggleTask(index));
     const delBtn = document.createElement("button");
     delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
@@ -23,13 +26,13 @@ function renderTasks() {
     li.appendChild(delBtn);
     taskList.appendChild(li);
   });
-  updateProductivity();
 }
 
 function addTask() {
   const text = input.value.trim();
+  const tag = tagSelect.value;
   if (!text) return;
-  tasks.push({ text, completed: false, date: getToday() });
+  tasks.push({ text, tag, completed: false });
   saveTasks();
   renderTasks();
   input.value = "";
@@ -37,7 +40,6 @@ function addTask() {
 
 function toggleTask(index) {
   tasks[index].completed = !tasks[index].completed;
-  tasks[index].date = getToday();
   saveTasks();
   renderTasks();
 }
@@ -49,22 +51,25 @@ function deleteTask(index) {
 }
 
 function filterTasks(type) {
-  let filtered = tasks;
-  if (type === "active") filtered = tasks.filter(t => !t.completed);
-  else if (type === "completed") filtered = tasks.filter(t => t.completed);
-
-  taskList.innerHTML = "";
-  filtered.forEach((task, index) => {
-    const li = document.createElement("li");
-    li.textContent = task.text;
-    if (task.completed) li.classList.add("completed");
-    li.addEventListener("click", () => toggleTask(index));
-    const delBtn = document.createElement("button");
-    delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
-    delBtn.onclick = () => deleteTask(index);
-    li.appendChild(delBtn);
-    taskList.appendChild(li);
-  });
+  if (type === "all") renderTasks();
+  else {
+    const filtered = tasks.filter(t => type === "active" ? !t.completed : t.completed);
+    taskList.innerHTML = "";
+    filtered.forEach((task, index) => {
+      const li = document.createElement("li");
+      li.textContent = `${task.text} [${task.tag}]`;
+      if (task.completed) li.classList.add("completed");
+      li.addEventListener("click", () => toggleTask(index));
+      const delBtn = document.createElement("button");
+      delBtn.innerHTML = `<i class="fas fa-trash-alt"></i>`;
+      delBtn.onclick = e => {
+        e.stopPropagation();
+        deleteTask(index);
+      };
+      li.appendChild(delBtn);
+      taskList.appendChild(li);
+    });
+  }
 }
 
 function clearCompleted() {
@@ -78,58 +83,23 @@ input.addEventListener("keydown", e => {
   if (e.key === "Enter") addTask();
 });
 
-function getToday() {
-  return new Date().toISOString().split("T")[0];
-}
+renderTasks();
 
-function updateProductivity() {
-  const today = getToday();
-  const count = tasks.filter(t => t.completed && t.date === today).length;
-  document.getElementById("tasks-today").textContent = count;
-}
-
-function toggleTheme() {
-  const root = document.documentElement;
-  const isDark = getComputedStyle(root).getPropertyValue("--bg") === "#1f1f1f";
-  if (isDark) {
-    root.style.setProperty("--bg", "#f4f4f4");
-    root.style.setProperty("--text", "#1f1f1f");
-    root.style.setProperty("--card", "#ffffff");
-  } else {
-    root.style.setProperty("--bg", "#1f1f1f");
-    root.style.setProperty("--text", "#f0f0f0");
-    root.style.setProperty("--card", "#2a2a2a");
+// Journal saving
+document.getElementById("save-journal").addEventListener("click", () => {
+  const journalText = document.getElementById("journal-input").value.trim();
+  if (journalText) {
+    alert("Journal saved!");
+    document.getElementById("journal-input").value = "";
   }
-}
-
-async function fetchQuote() {
-  try {
-    const res = await fetch("https://api.quotable.io/random");
-    const data = await res.json();
-    document.getElementById("quote-text").textContent = `"${data.content}" — ${data.author}`;
-  } catch {
-    document.getElementById("quote-text").textContent = "Stay focused. Keep going.";
-  }
-}
-// Journal Save Logic
-const journalInput = document.getElementById("journal-input");
-const saveJournalBtn = document.getElementById("save-journal");
-
-function saveJournal() {
-  const content = journalInput.value;
-  localStorage.setItem("daily-journal", content);
-}
-
-function loadJournal() {
-  journalInput.value = localStorage.getItem("daily-journal") || "";
-}
-
-saveJournalBtn.addEventListener("click", saveJournal);
-window.addEventListener("DOMContentLoaded", loadJournal);
-
-document.getElementById("get-started").addEventListener("click", () => {
-  document.getElementById("welcome-screen").style.display = "none";
-  document.querySelector(".container").style.display = "block";
-  fetchQuote();
-  renderTasks();
 });
+
+// Random quote
+const quotes = [
+  "Believe in yourself.",
+  "Every day is a second chance.",
+  "Stay focused and never give up.",
+  "Small steps every day.",
+  "Progress, not perfection."
+];
+document.getElementById("quote-random").textContent = quotes[Math.floor(Math.random() * quotes.length)];
