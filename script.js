@@ -111,6 +111,21 @@ async function fetchQuote() {
     document.getElementById("quote-text").textContent = "Stay focused. Keep going.";
   }
 }
+// Journal Save Logic
+const journalInput = document.getElementById("journal-input");
+const saveJournalBtn = document.getElementById("save-journal");
+
+function saveJournal() {
+  const content = journalInput.value;
+  localStorage.setItem("daily-journal", content);
+}
+
+function loadJournal() {
+  journalInput.value = localStorage.getItem("daily-journal") || "";
+}
+
+saveJournalBtn.addEventListener("click", saveJournal);
+window.addEventListener("DOMContentLoaded", loadJournal);
 
 document.getElementById("get-started").addEventListener("click", () => {
   document.getElementById("welcome-screen").style.display = "none";
