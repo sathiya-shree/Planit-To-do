@@ -7,36 +7,32 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
   <script defer src="script.js"></script>
-  <script src="starfield.js"></script>
+  <script defer src="starfield.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
   <canvas id="bg"></canvas>
-
-  <!-- Welcome Screen -->
-  <div id="welcome-screen" class="welcome">
-    <h2>Organize your tasks efficiently with categories, track your progress, and more.</h2>
-    <button id="get-started">Get Started</button>
-  </div>
-
-  <!-- Main App -->
-  <div class="container" style="display: none;">
-    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+  <div class="container">
     <h1>Planit - To Do</h1>
-    <p id="quote-text" class="quote">Loading quote...</p>
+    <p id="quote-random" class="random-quote">"Stay focused and never give up!"</p>
 
-   <!-- Journal Section -->
-<div class="journal-section">
-  <h3>Daily Journal</h3>
-  <textarea id="journal-input" placeholder="Write your thoughts..."></textarea>
-  <button id="save-journal">Save Journal</button>
-</div>
+    <div class="journal-section">
+      <h3>Daily Journal</h3>
+      <textarea id="journal-input" placeholder="Write your thoughts..."></textarea>
+      <button id="save-journal">Save Journal</button>
+    </div>
 
-<!-- Task Input -->
-<div class="input-group">
-  <input type="text" id="task-input" placeholder="Add a new task..." />
-  <button id="add-btn"><i class="fas fa-plus"></i></button>
-</div>
+    <div style="margin-bottom: 1rem;"></div>
+
+    <div class="input-group">
+      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <select id="tag-select">
+        <option value="work">Work</option>
+        <option value="personal">Personal</option>
+        <option value="study">Study</option>
+      </select>
+      <button id="add-btn"><i class="fas fa-plus"></i></button>
+    </div>
 
     <ul id="task-list"></ul>
 
