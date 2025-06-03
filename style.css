@@ -1,122 +1,104 @@
-/* Reset + Basics */
+:root {
+  --bg: #1f1f1f;
+  --text: #f0f0f0;
+  --accent: #00f7ff;
+  --card: #2a2a2a;
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #111;
-  color: #fff;
-}
-
-/* 🌌 Starfield Banner */
-.starfield-container {
-  position: relative;
-  height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
   overflow: hidden;
 }
 
-#starfield {
-  position: absolute;
+canvas#bg {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
 }
 
-.starfield-overlay {
-  position: relative;
-  z-index: 1;
-  text-align: left;
-  padding: 100px 50px;
-  max-width: 600px;
+.container, .welcome {
+  max-width: 400px;
+  background: var(--card);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0,255,255,0.15);
+  text-align: center;
 }
 
-.starfield-overlay h1 {
-  font-size: 2.5em;
-  font-weight: bold;
-}
-
-.starfield-overlay p {
-  font-size: 1.2em;
-  margin: 20px 0;
-}
-
-.start-btn {
-  background-color: #00f0ff;
-  color: #111;
-  border: none;
-  padding: 10px 20px;
-  font-weight: bold;
-  border-radius: 5px;
+.theme-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
   cursor: pointer;
 }
 
-/* 📋 Main Content */
-.main-content {
-  background-color: #222;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
+h1 {
+  color: var(--accent);
 }
 
-.todo-app {
-  background-color: #333;
-  padding: 30px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 500px;
+.quote {
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
 }
 
-.input-row {
+.input-group {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
 }
 
-input, select, button, textarea {
+input {
+  flex: 1;
   padding: 10px;
   border: none;
   border-radius: 5px;
-  font-size: 1em;
-}
-
-input, select {
-  flex: 1;
 }
 
 button {
-  background-color: #00f0ff;
-  color: #000;
+  background: var(--accent);
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
   cursor: pointer;
+  font-weight: bold;
 }
 
-ul#task-list {
+ul {
   list-style: none;
   padding: 0;
-  margin-top: 20px;
+  margin-top: 1rem;
 }
 
-ul#task-list li {
+li {
+  background: #333;
+  margin-bottom: 0.5rem;
   padding: 10px;
-  background: #444;
-  margin-bottom: 10px;
   border-radius: 5px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-ul#task-list li.completed {
+li.completed {
   text-decoration: line-through;
-  color: #999;
+  opacity: 0.6;
 }
 
-.filter-buttons {
+.footer {
+  margin-top: 1rem;
   display: flex;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-textarea {
-  width: 100%;
-  margin-top: 10px;
-  resize: none;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: space-between;
 }
