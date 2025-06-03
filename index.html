@@ -3,53 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PlanIt</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <title>Planit - To Do</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="https://img.icons8.com/dusk/64/task.png" />
+  <script defer src="script.js"></script>
+  <script src="starfield.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+  <canvas id="bg"></canvas>
 
-  <!-- ⭐ Starfield Banner -->
-  <div class="starfield-container">
-    <canvas id="starfield"></canvas>
-    <div class="starfield-overlay">
-      <h1>Welcome to PlanIt!</h1>
-      <p>Organize your tasks efficiently with categories, track your progress, and more.</p>
-      <button class="start-btn" onclick="document.getElementById('main-content').scrollIntoView({behavior: 'smooth'})">Get Started</button>
-    </div>
+  <!-- Welcome Screen -->
+  <div id="welcome-screen" class="welcome">
+    <h2>Organize your tasks efficiently with categories, track your progress, and more.</h2>
+    <button id="get-started">Get Started</button>
   </div>
 
-  <!-- 📋 Main Content -->
-  <div id="main-content" class="main-content">
-    <div class="todo-app">
-      <h2>PlanIt - To Do</h2>
-      <blockquote>"In the middle of every difficulty lies opportunity."<br>— Albert Einstein</blockquote>
+  <!-- Main App -->
+  <div class="container" style="display: none;">
+    <div class="theme-toggle" onclick="toggleTheme()">🌓</div>
+    <h1>Planit - To Do</h1>
+    <p id="quote-text" class="quote">Loading quote...</p>
 
-      <div class="input-row">
-        <input type="text" id="task-input" placeholder="Add a new task..." />
-        <select id="category-select">
-          <option value="Study">Study</option>
-          <option value="Work">Work</option>
-          <option value="Personal">Personal</option>
-        </select>
-        <button id="add-btn"><i class="fas fa-plus"></i></button>
-      </div>
+    <div id="productivity-container" class="productivity">
+      <p>Tasks completed today: <span id="tasks-today">0</span></p>
+    </div>
 
-      <ul id="task-list"></ul>
+    <div class="input-group">
+      <input type="text" id="task-input" placeholder="Add a new task..." />
+      <button id="add-btn"><i class="fas fa-plus"></i></button>
+    </div>
 
-      <div class="filter-buttons">
-        <button onclick="renderTasks()">All</button>
-        <button onclick="filterTasks('active')">Active</button>
-        <button onclick="filterTasks('completed')">Completed</button>
-        <button onclick="clearCompleted()">Clear Completed</button>
-      </div>
+    <ul id="task-list"></ul>
 
-      <h3>Daily Journal</h3>
-      <textarea id="daily-journal" rows="4" placeholder="Write about your day..."></textarea>
+    <div class="footer">
+      <button onclick="filterTasks('all')">All</button>
+      <button onclick="filterTasks('active')">Active</button>
+      <button onclick="filterTasks('completed')">Completed</button>
+      <button onclick="clearCompleted()">Clear Completed</button>
     </div>
   </div>
-
-  <script src="starfield.js"></script>
-  <script src="script.js"></script>
 </body>
 </html>
