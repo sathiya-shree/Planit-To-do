@@ -43,6 +43,24 @@ canvas#bg {
   cursor: pointer;
 }
 
+.journal-section {
+  margin-top: 2rem;
+  text-align: left;
+}
+
+#journal-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  background: #1f1f1f;
+  color: #f0f0f0;
+  border: 1px solid #444;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 0.5rem;
+}
+
 h1 {
   color: var(--accent);
 }
