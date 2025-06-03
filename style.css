@@ -44,7 +44,8 @@ canvas#bg {
 }
 
 .journal-section {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2rem; /* Adds space below the journal */
   text-align: left;
 }
 
@@ -58,7 +59,22 @@ canvas#bg {
   border: 1px solid #444;
   resize: vertical;
   font-family: inherit;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+}
+
+#save-journal {
+  background: var(--accent);
+  color: black;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s ease;
+}
+
+#save-journal:hover {
+  opacity: 0.8;
 }
 
 h1 {
