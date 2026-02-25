@@ -21,6 +21,10 @@ PlanIt is a smart, modern to-do list app built with HTML, CSS, and JavaScript. I
 ---
 
 🖼️ Screenshot
+
+
+
+
 <img width="554" height="543" alt="image" src="https://github.com/user-attachments/assets/4ccaa416-13f0-4ea0-9171-110c84e4f806" />
 
 ---
